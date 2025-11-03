@@ -81,6 +81,7 @@ vampire*
 util/vdc/vdc
 test/integration/integration_tests
 test/unit/unit_tests
+slurm*
 #----------------------------------------------
 # Obsolete
 #----------------------------------------------

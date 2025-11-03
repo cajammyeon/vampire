@@ -42,8 +42,8 @@ exchange:interaction-range = 3
 # Data output
 #------------------------------------------
 config:atoms
-config:atoms-output-rate = 10000
-config:output-format = text
+config:atoms-output-rate = 1000
+config:output-format = binary
 config:sld
 
 output:real-time
