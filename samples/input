@@ -2,28 +2,17 @@
 # Creation attributes
 #------------------------------------------
 dimensions:unit-cell-size = 2.99 !A
-dimensions:system-size-x = 2.87 !nm
-dimensions:system-size-y = 2.87 !nm
-dimensions:system-size-z = 2.87 !nm
+dimensions:system-size-x = 4.8 !nm
+dimensions:system-size-y = 4.8 !nm
+dimensions:system-size-z = 1.5 !nm
 
 #------------------------------------------
 # Material files
 #------------------------------------------
 create:crystal-structure = bcc
 create:crystal-sublattice-materials = true
-create:periodic-boundaries-x
-create:periodic-boundaries-y
-create:periodic-boundaries-z
 
 material:file = FeRh.mat
-
-#------------------------------------------
-# Simulation attributes
-#------------------------------------------
-sim:temperature = 10
-sim:time-steps-increment = 1
-sim:total-time-steps = 20000
-sim:time-step = 0.5 !fs
 
 #------------------------------------------
 # Program and integrator details
@@ -31,11 +20,13 @@ sim:time-step = 0.5 !fs
 sim:program = time-series
 sim:integrator = spin-lattice
 
-sim:minimum-temperature = 0
-sim:maximum-temperature = 1000
-sim:temperature-increment = 25
-sim:equilibration-time-steps = 500
-sim:loop-time-steps = 5000
+#------------------------------------------
+# Simulation attributes
+#------------------------------------------
+sim:time-steps-increment = 1
+sim:total-time-steps = 20000
+sim:time-step = 0.5 !fs
+sim:temperature = 300
 
 #------------------------------------------
 # SLD config
@@ -52,6 +43,7 @@ exchange:interaction-range = 3
 #------------------------------------------
 config:atoms
 config:atoms-output-rate = 10000
+config:output-format = text
 config:sld
 
 output:real-time
