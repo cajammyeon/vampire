@@ -7,6 +7,7 @@ material:num-materials = 2
 # Material 1 (Fe)
 #------------------------------------------------
 material[1]:material-name = Fe
+material[1]:material-element = Fe
 material[1]:unit-cell-category = 1
 
 material[1]:damping-constant = 0.1
@@ -23,10 +24,11 @@ material[1]:coupling-C0 = 0.5
 # Material 2 (Rh)
 #------------------------------------------------
 material[2]:material-name = Rh
+material[2]:material-element = Rh
 material[2]:unit-cell-category = 2
 
 material[2]:damping-constant = 0.1
-material[2]:atomic-spin-moment = 2.22 !muB
+material[2]:non-magnetic = keep
 material[2]:uniaxial-anisotropy-constant = 1.0e-24
 material[2]:initial-spin-direction = 0,0,1
 material[2]:mass = 5.7915e-3
