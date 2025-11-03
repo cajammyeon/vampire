@@ -44,7 +44,7 @@ exchange:interaction-range = 3
 config:atoms
 config:atoms-output-rate = 1000
 config:output-format = binary
-config:sld
+config:output-nodes = 12
 
 output:real-time
 output:temperature
