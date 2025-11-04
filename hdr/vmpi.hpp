@@ -31,6 +31,7 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include <cstdint>
 
 #ifdef MPICF
 	#include <mpi.h>

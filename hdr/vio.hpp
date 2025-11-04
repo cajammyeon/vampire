@@ -28,6 +28,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <cstdint>
 #include <sstream>
 #include <time.h>
 #include <sys/types.h>

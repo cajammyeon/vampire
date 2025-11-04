@@ -13,6 +13,7 @@
 
 // Vampire headers
 #include "hamr.hpp"
+#include <cstdint>
 
 // hamr headers
 #include "internal.hpp"
