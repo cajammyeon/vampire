@@ -1,0 +1,67 @@
+#------------------------------------------
+# Creation attributes
+#------------------------------------------
+dimensions:unit-cell-size = 3 !A
+dimensions:system-size-x = 5 !nm
+dimensions:system-size-y = 5 !nm
+dimensions:system-size-z = 2 !nm
+
+#------------------------------------------
+# Material files
+#------------------------------------------
+create:crystal-structure = bcc
+create:crystal-sublattice-materials = true
+create:periodic-boundaries-x = true
+create:periodic-boundaries-y = true
+
+material:file = FeRh.mat
+
+#------------------------------------------
+# Program and integrator details
+#------------------------------------------
+sim:program = time-series
+sim:integrator = spin-lattice
+
+#------------------------------------------
+# Simulation attributes
+#------------------------------------------
+sim:time-steps-increment = 1
+sim:total-time-steps = 20000
+sim:time-step = 0.5 !fs
+sim:temperature = 300
+
+#------------------------------------------
+# Simulation attributes:
+#------------------------------------------
+# sim:temperature = 300.0
+# sim:time-steps-increment = 1000
+# sim:total-time-steps = 10000
+# sim:time-step = 1 !fs
+
+#------------------------------------------
+# Program and integrator details
+#------------------------------------------
+# sim:program = benchmark
+# sim:integrator = llg-heun
+
+#------------------------------------------
+# SLD config
+#------------------------------------------
+spin-lattice:potential-cutoff-range = 7.8 !A
+spin-lattice:fields-cutoff-range = 3.75 !A
+spin-lattice:coupling = pseudodipolar
+spin-lattice:potential = harmonic
+
+exchange:interaction-range = 3
+
+#------------------------------------------
+# Data output
+#------------------------------------------
+config:atoms
+config:atoms-output-rate = 10
+# config:output-nodes = 12
+config:sld
+
+output:real-time
+output:temperature
+output:magnetisation
