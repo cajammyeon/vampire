@@ -59,7 +59,6 @@ exchange:interaction-range = 3
 #------------------------------------------
 config:atoms
 config:atoms-output-rate = 10
-# config:output-nodes = 12
 config:sld
 
 output:real-time
