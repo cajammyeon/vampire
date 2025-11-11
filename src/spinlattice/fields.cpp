@@ -133,7 +133,7 @@ namespace sld{
 			double exch_J0_prime = sld::internal::mp[0].J0_prime.get() / 1.602176634e-19; 
 			double J;
 			int j;
-			double r_sqr_cut = sld::internal::r_cut_fields*sld::internal::r_cut_fields;
+			double r_sqr_cut = sld::internal::r_cut_fields * sld::internal::r_cut_fields;
 			double oneover3 = 1.0 / 3.0;
 			double exch_inv_rcut = 1.0 / sld::internal::r_cut_fields;
 			double sumJ = 0.0;
@@ -203,6 +203,9 @@ namespace sld{
 						// Heaviside function
              			if(rji_sqr < r_sqr_cut)
              			{   
+							double power_0, power_1, power_2, power_3, power_4, power_5;
+							double J_prime;
+
 							count_int++;
 							
 							// Distance
@@ -235,12 +238,17 @@ namespace sld{
 							// (S_i . S_j)
                  			si_dot_sj = (sx * sjx) + (sy * sjy) + (sz * sjz);
 							
-							// Exchange force = d/dx(J(r_ij)) - components
-							// TODO : calculate force using the curve fit
-							J_prime = 0;
-							fx += (J_prime * si_dot_sj);
-							fy += (J_prime * si_dot_sj);
-							fz += (J_prime * si_dot_sj);
+							// Exchange force - component
+							power_1 = (15119.578051758046)  * 1;
+							power_2 = (-17795.99606369897)  * rji * 2;
+							power_3 = (10166.832415092445)  * rji * rji * 3;
+							power_4 = (-2830.5206084168767) * rji * rji * rji * 4;
+							power_5 = (308.2731817371223)   * rji * rji * rji * rji * 5;
+							J_prime = power_1 + power_2 + power_3 + power_4 + power_5;
+
+							fx += (J_prime * si_dot_sj * dx * inv_rji);
+							fy += (J_prime * si_dot_sj * dy * inv_rji);
+							fz += (J_prime * si_dot_sj * dz * inv_rji);
 
 							// Sum of J(r_ij)(S_i . S_j)
                  			energy += (J * si_dot_sj);
