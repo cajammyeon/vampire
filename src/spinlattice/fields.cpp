@@ -211,9 +211,15 @@ namespace sld{
 							// Inverse of distance
                  			inv_rji = 1.0 / rji;
 							
-							// J(r_ij) = J0(1 - (r_ij / r_c) ^ 3)
-							y = (1.0 - (rji * exch_inv_rcut));
-							J = (exch_J0 * y * y * y);
+							// J(r_ij) = (-4966.633126539973) + (15119.578051758046) * (x ** 1) + (-17795.99606369897) * (x ** 2) + 
+							// (10166.832415092445) * (x ** 3)  + (-2830.5206084168767) * (x ** 4) + (308.2731817371223) * (x ** 5)
+							power_0 = (-4966.633126539973);
+							power_1 = (15119.578051758046)  * rji;
+							power_2 = (-17795.99606369897)  * rji * rji;
+							power_3 = (10166.832415092445)  * rji * rji * rji;
+							power_4 = (-2830.5206084168767) * rji * rji * rji * rji;
+							power_5 = (308.2731817371223)   * rji * rji * rji * rji * rji;
+							J       = power_0 + power_1 + power_2 + power_3 + power_4 + power_5;
 
 							// Neighbour spin
 							sjx = x_spin_array[j];
@@ -230,10 +236,11 @@ namespace sld{
                  			si_dot_sj = (sx * sjx) + (sy * sjy) + (sz * sjz);
 							
 							// Exchange force = d/dx(J(r_ij)) - components
-                 			f_exch = -exch_J0_prime * y * y;
-							fx += f_exch * dx *  si_dot_sj * inv_rji;
-							fy += f_exch * dy *  si_dot_sj * inv_rji;
-							fz += f_exch * dz *  si_dot_sj * inv_rji;
+							// TODO : calculate force using the curve fit
+							J_prime = 0;
+							fx += (J_prime * si_dot_sj);
+							fy += (J_prime * si_dot_sj);
+							fz += (J_prime * si_dot_sj);
 
 							// Sum of J(r_ij)(S_i . S_j)
                  			energy += (J * si_dot_sj);
