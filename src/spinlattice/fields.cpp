@@ -120,7 +120,6 @@ namespace sld{
 							  std::vector<double>& fields_array_y,
 							  std::vector<double>& fields_array_z)
 		{
-
 			double rx, ry, rz;
 			double dx, dy, dz;
 			double sx, sy, sz;
@@ -141,75 +140,102 @@ namespace sld{
 
        		for(int i = start_index; i < end_index; ++i)
 			{
-       
+				// Material type : 0 = Fe, 1 = Rh
 				const unsigned int imat = atoms::type_array[i];
+
+				// J0 : not used in the FeRh calculation
+				// TODO : Remove J0 definition
 				double exch_J0 = sld::internal::mp[imat].J0_ms.get(); 
 				double exch_J0_prime = sld::internal::mp[imat].J0_prime.get() / 1.602176634e-19;
 				int count_int = 0;
-
+				
+				// Forces
 				fx = 0.0;
 				fy = 0.0;
 				fz = 0.0;
+
+				// Field
 				hx = 0.0;
 				hy = 0.0;
 				hz = 0.0;
+
+				// Sum of exchange
 				sumJ = 0.0;
+
+				// Sum of energy
 				energy = 0.0;
 
+				// Atoms location - (x, y, z)
 				rx = x_coord_array[i];
 				ry = y_coord_array[i];
 				rz = z_coord_array[i];
-
+				
+				// Spin vector of each atoms - (i, j, k)
 				sx = x_spin_array[i];
 				sy = y_spin_array[i];
 				sz = z_spin_array[i];
-
+				
+				// Index of neighbours - start and end of neighbours
 				int nbr_start = neighbour_list_start_index[i];
 				int nbr_end = neighbour_list_end_index[i] + 1;
-
+				
+				// Iterate - neighbour list
           		for( int n = nbr_start; n < nbr_end; ++n)
 				{
+					// Pick one neighbour for calculation
 					j = neighbour_list_array[n];
 
 					if (j != i)
 					{
+						// Distance from picked neighbour
 						dx = -x_coord_array[j] + rx;
 						dy = -y_coord_array[j] + ry;
 						dz = -z_coord_array[j] + rz;
 
+						// Wrap in dimension
 						dx = sld::PBC_wrap( dx, cs::system_dimensions[0], cs::pbc[0]);
 						dy = sld::PBC_wrap( dy, cs::system_dimensions[1], cs::pbc[1]);
 						dz = sld::PBC_wrap( dz, cs::system_dimensions[2], cs::pbc[2]);
 
+						// Distance to neighbour squared
              			rji_sqr = (dx*dx) + (dy*dy) + (dz*dz);
 
-             			if( rji_sqr < r_sqr_cut)
+						// Heaviside function
+             			if(rji_sqr < r_sqr_cut)
              			{   
 							count_int++;
-
+							
+							// Distance
                  			rji = sqrt(rji_sqr);
-                 			inv_rji = 1.0 / rji;
 
+							// Inverse of distance
+                 			inv_rji = 1.0 / rji;
+							
+							// J(r_ij) = J0(1 - (r_ij / r_c) ^ 3)
 							y = (1.0 - (rji * exch_inv_rcut));
 							J = (exch_J0 * y * y * y);
 
+							// Neighbour spin
 							sjx = x_spin_array[j];
 							sjy = y_spin_array[j];
 							sjz = z_spin_array[j];
 
+							// Field - components
 							hx += (J * sjx);
 							hy += (J * sjy);
 							hz += (J * sjz);
 							sumJ += J;
 
-                 			si_dot_sj = sx * sjx + sy * sjy + sz * sjz;
-
+							// (S_i . S_j)
+                 			si_dot_sj = (sx * sjx) + (sy * sjy) + (sz * sjz);
+							
+							// Exchange force = d/dx(J(r_ij)) - components
                  			f_exch = -exch_J0_prime * y * y;
-
 							fx += f_exch * dx *  si_dot_sj * inv_rji;
 							fy += f_exch * dy *  si_dot_sj * inv_rji;
 							fz += f_exch * dz *  si_dot_sj * inv_rji;
 
+							// Sum of J(r_ij)(S_i . S_j)
                  			energy += (J * si_dot_sj);
              			}
           			}
@@ -248,7 +274,6 @@ namespace sld{
 							  	  std::vector<double>& fields_array_y,
 								  std::vector<double>& fields_array_z)
 		{
-
 			double rx, ry, rz;
 			double dx, dy, dz;
 			double sx, sy, sz;
@@ -483,9 +508,9 @@ namespace sld{
 
 							energy_c +=-2.0/5.0*fact_ms*inv_rji4*inv_rji4*(prod3+prod4);
 
-							fc_x += 12.0/35.0*fact*inv_rji6*( sj_dot_rji * sx + si_dot_rji * sjx -6.0* dx* sj_dot_rji* si_dot_rji * inv_rji2+ oneover3*4.0*si_dot_sj*dx);
-							fc_y += 12.0/35.0*fact*inv_rji6*( sj_dot_rji * sy + si_dot_rji * sjy -6.0* dy* sj_dot_rji* si_dot_rji * inv_rji2+ oneover3*4.0*si_dot_sj*dy);
-							fc_z += 12.0/35.0*fact*inv_rji6*( sj_dot_rji * sz + si_dot_rji * sjz -6.0* dz* sj_dot_rji* si_dot_rji * inv_rji2+ oneover3*4.0*si_dot_sj*dz);
+							fc_x += 12.0/35.0*fact*inv_rji6*( sj_dot_rji * sx + si_dot_rji * sjx - 6.0 * dx* sj_dot_rji* si_dot_rji * inv_rji2+ oneover3*4.0*si_dot_sj*dx);
+							fc_y += 12.0/35.0*fact*inv_rji6*( sj_dot_rji * sy + si_dot_rji * sjy - 6.0 * dy* sj_dot_rji* si_dot_rji * inv_rji2+ oneover3*4.0*si_dot_sj*dy);
+							fc_z += 12.0/35.0*fact*inv_rji6*( sj_dot_rji * sz + si_dot_rji * sjz - 6.0 * dz* sj_dot_rji* si_dot_rji * inv_rji2+ oneover3*4.0*si_dot_sj*dz);
 							
 							fc_x += 9.0/5.0*fact*((-4*dx*inv_rji6)*prod1*prod2+ inv_rji4*prod2*(2*sx*inv_rji2*si_dot_rji-2*dx*si_dot_rji*si_dot_rji*inv_rji4) + inv_rji4*prod1*(2*sjx*inv_rji2*sj_dot_rji-2*dx*sj_dot_rji*sj_dot_rji*inv_rji4));
 							fc_y += 9.0/5.0*fact*((-4*dy*inv_rji6)*prod1*prod2+ inv_rji4*prod2*(2*sy*inv_rji2*si_dot_rji-2*dy*si_dot_rji*si_dot_rji*inv_rji4) + inv_rji4*prod1*(2*sjy*inv_rji2*sj_dot_rji-2*dy*sj_dot_rji*sj_dot_rji*inv_rji4));
