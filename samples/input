@@ -26,7 +26,7 @@ sim:integrator = spin-lattice
 # Simulation attributes
 #------------------------------------------
 sim:cooling-function = linear
-sim:cooling-time = 1
+sim:cooling-time = 1e-12 
 
 sim:equilibration-time-steps = 10000
 sim:loop-time-steps = 10000
@@ -55,3 +55,5 @@ config:sld
 output:real-time
 output:temperature
 output:magnetisation
+output:lattice-temperature
+output:spin-temperature
