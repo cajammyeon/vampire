@@ -29,8 +29,8 @@ material[2]:unit-cell-category = 2
 
 material[2]:damping-constant = 0.1
 material[2]:non-magnetic = keep
-material[2]:uniaxial-anisotropy-constant = 1.0e-24
-material[2]:initial-spin-direction = 0,0,1
+# material[2]:uniaxial-anisotropy-constant = 1.0e-24
+# material[2]:initial-spin-direction = 0,0,1
 # material[2]:mass = 5.7915e-3
 # material[2]:damping-constant-lattice = 0.6
 material[2]:exchange-J0 = 0.904 !eV

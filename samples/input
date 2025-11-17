@@ -19,30 +19,21 @@ material:file = FeRh.mat
 #------------------------------------------
 # Program and integrator details
 #------------------------------------------
-sim:program = time-series
+sim:program = field-cool
 sim:integrator = spin-lattice
 
 #------------------------------------------
 # Simulation attributes
 #------------------------------------------
-sim:time-steps-increment = 1
-sim:total-time-steps = 20000
-sim:time-step = 0.5 !fs
-sim:temperature = 300
+sim:equilibration-time-steps = 100000
+sim:loop-time-steps = 100000
 
-#------------------------------------------
-# Simulation attributes:
-#------------------------------------------
-# sim:temperature = 300.0
-# sim:time-steps-increment = 1000
-# sim:total-time-steps = 10000
-# sim:time-step = 1 !fs
+sim:applied-field-strength = 0.1      ! T
+sim:applied-field-unit-vector = 0,0,1
 
-#------------------------------------------
-# Program and integrator details
-#------------------------------------------
-# sim:program = benchmark
-# sim:integrator = llg-heun
+sim:maximum-temperature = 1000.0 
+sim:minimum-temperature = 0.0
+sim:temperature-increment = 10.0
 
 #------------------------------------------
 # SLD config
