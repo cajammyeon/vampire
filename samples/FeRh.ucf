@@ -1,0 +1,13 @@
+# Unit cell size (Angstroms) - approx for FeRh
+2.98 2.98 2.98
+# Unit cell lattice vectors
+1.0 0.0 0.0
+0.0 1.0 0.0
+0.0 0.0 1.0
+# Atoms: num_atoms num_materials
+2 2
+# id cx cy cz mat cat hcat
+0 0.0 0.0 0.0 0 0 0
+1 0.5 0.5 0.5 1 0 0
+# Interactions (Left empty to allow code to generate via exchange:interaction-range)
+0
