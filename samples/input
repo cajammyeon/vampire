@@ -13,7 +13,6 @@ create:crystal-structure = bcc
 create:crystal-sublattice-materials = true
 create:periodic-boundaries-x = true
 create:periodic-boundaries-y = true
-create:periodic-boundaries-z = true
 
 material:file = FeRh.mat
 
@@ -27,7 +26,7 @@ sim:integrator = spin-lattice
 # Simulation attributes
 #------------------------------------------
 sim:cooling-function = gaussian
-sim:cooling-time = 100!ps
+sim:cooling-time = 10!ps
 
 sim:maximum-temperature = 1000.0 
 sim:minimum-temperature = 0.0
