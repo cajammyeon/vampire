@@ -25,15 +25,18 @@ sim:integrator = spin-lattice
 #------------------------------------------
 # Simulation attributes
 #------------------------------------------
-sim:cooling-function = linear
-sim:cooling-time = 1e-12 
-
-sim:equilibration-time-steps = 10000
-sim:loop-time-steps = 10000
+sim:cooling-function = gaussian
+sim:cooling-time = 100!ps
 
 sim:maximum-temperature = 1000.0 
 sim:minimum-temperature = 0.0
-sim:temperature-increment = -10.0
+sim:applied-field-strength = 0!T
+
+sim:total-time-steps = 3000000
+sim:equilibrium-temperature = xx
+sim:equilibrium-time-steps = 10000
+sim:time-steps-increment = 1
+sim:time-step = 1e-16
 
 #------------------------------------------
 # SLD config
