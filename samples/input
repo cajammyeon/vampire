@@ -13,6 +13,7 @@ create:crystal-structure = bcc
 create:crystal-sublattice-materials = true
 create:periodic-boundaries-x = true
 create:periodic-boundaries-y = true
+create:periodic-boundaries-z = true
 
 material:file = FeRh.mat
 
@@ -33,7 +34,7 @@ sim:minimum-temperature = 0.0
 sim:applied-field-strength = 0!T
 
 sim:total-time-steps = 3000000
-sim:equilibration-temperature = 1000
+sim:equilibration-temperature = 300
 sim:equilibration-time-steps = 10000
 sim:time-steps-increment = 100
 sim:time-step = 1e-16
