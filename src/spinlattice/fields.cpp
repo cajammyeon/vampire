@@ -203,7 +203,8 @@ namespace sld{
 						// Heaviside function
              			if(rji_sqr < r_sqr_cut)
              			{   
-							double power_0, power_1, power_2, power_3, power_4, power_5;
+							double power_0, power_1, power_2, power_3, power_4, power_5, power_6, power_7, power_8, power_9;
+							int rji_1, rji_2, rji_3, rji_4, rji_5, rji_6, rji_7, rji_8, rji_9;
 							double J_prime;
 
 							count_int++;
@@ -214,15 +215,30 @@ namespace sld{
 							// Inverse of distance
                  			inv_rji = 1.0 / rji;
 							
-							// J(r_ij) = (-4966.633126539973) + (15119.578051758046) * (x ** 1) + (-17795.99606369897) * (x ** 2) + 
-							// (10166.832415092445) * (x ** 3)  + (-2830.5206084168767) * (x ** 4) + (308.2731817371223) * (x ** 5)
-							power_0 = (-4966.633126539973);
-							power_1 = (15119.578051758046)  * rji;
-							power_2 = (-17795.99606369897)  * rji * rji;
-							power_3 = (10166.832415092445)  * rji * rji * rji;
-							power_4 = (-2830.5206084168767) * rji * rji * rji * rji;
-							power_5 = (308.2731817371223)   * rji * rji * rji * rji * rji;
-							J       = power_0 + power_1 + power_2 + power_3 + power_4 + power_5;
+							// y = (-11316.65343353834) + (29163.241792696626) * (x ** 1) + (-13588.009547029487) * (x ** 2) + (-32768.34075295124) * (x ** 3) 
+							// + (55659.7767532429) * (x ** 4) + (-39910.57897518696) * (x ** 5) + (16094.681469038807) * (x ** 6)
+							// + (-3793.6766464869665) * (x ** 7) + (489.52895044372053) * (x ** 8) + (-26.79259435916174) * (x ** 9)
+							rji_1 = rji;
+							rji_2 = rji_1 * rji_1;
+							rji_3 = rji_1 * rji_2;
+							rji_4 = rji_2 * rji_2;
+							rji_5 = rji_2 * rji_3;
+							rji_6 = rji_3 * rji_3;
+							rji_7 = rji_3 * rji_4;
+							rji_8 = rji_4 * rji_4;
+							rji_9 = rji_4 * rji_5;
+
+							power_0 = (-11316.65343353834);
+							power_1 = (29163.241792696626)  * rji_1;
+							power_2 = (-13588.009547029487) * rji_2;
+							power_3 = (-32768.34075295124)  * rji_3;
+							power_4 = (55659.7767532429)    * rji_4;
+							power_5 = (-39910.57897518696)  * rji_5;
+							power_6 = (16094.681469038807)  * rji_6;
+							power_7 = (-3793.6766464869665) * rji_7;
+							power_8 = (489.52895044372053)  * rji_8;
+							power_9 = (-26.79259435916174)  * rji_9;
+							J       = power_0 + power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
 
 							std::cout << "Distance : " << rji << "    " << "Exchange value : " << J << "\n";
 
@@ -241,12 +257,16 @@ namespace sld{
                  			si_dot_sj = (sx * sjx) + (sy * sjy) + (sz * sjz);
 							
 							// Exchange force - component
-							power_1 = (15119.578051758046)  * 1;
-							power_2 = (-17795.99606369897)  * rji * 2;
-							power_3 = (10166.832415092445)  * rji * rji * 3;
-							power_4 = (-2830.5206084168767) * rji * rji * rji * 4;
-							power_5 = (308.2731817371223)   * rji * rji * rji * rji * 5;
-							J_prime = power_1 + power_2 + power_3 + power_4 + power_5;
+							power_1 = (29163.241792696626);
+							power_2 = (-13588.009547029487) * rji_1 * 2;
+							power_3 = (-32768.34075295124)  * rji_2 * 3;
+							power_4 = (55659.7767532429)    * rji_3 * 4;
+							power_5 = (-39910.57897518696)  * rji_4 * 5;
+							power_6 = (16094.681469038807)  * rji_5 * 6;
+							power_7 = (-3793.6766464869665) * rji_6 * 7;
+							power_8 = (489.52895044372053)  * rji_7 * 8;
+							power_9 = (-26.79259435916174)  * rji_8 * 9;
+							J_prime = power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
 
 							fx += (J_prime * si_dot_sj * dx * inv_rji);
 							fy += (J_prime * si_dot_sj * dy * inv_rji);

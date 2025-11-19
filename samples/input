@@ -1,10 +1,10 @@
 #------------------------------------------
 # Creation attributes
 #------------------------------------------
-dimensions:unit-cell-size = 5 !A
-dimensions:system-size-x = 3 !nm
-dimensions:system-size-y = 3 !nm
-dimensions:system-size-z = 3 !nm
+dimensions:unit-cell-size = 3 !A
+dimensions:system-size-x = 4 !nm
+dimensions:system-size-y = 4 !nm
+dimensions:system-size-z = 2 !nm
 
 #------------------------------------------
 # Material files
@@ -45,7 +45,7 @@ sim:time-step = 1e-16
 # SLD config
 #------------------------------------------
 spin-lattice:potential-cutoff-range = 4.0 !A
-spin-lattice:fields-cutoff-range = 3.75 !A
+spin-lattice:fields-cutoff-range = 3.25 !A
 spin-lattice:coupling = pseudodipolar
 spin-lattice:potential = harmonic
 
