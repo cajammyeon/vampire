@@ -224,6 +224,8 @@ namespace sld{
 							power_5 = (308.2731817371223)   * rji * rji * rji * rji * rji;
 							J       = power_0 + power_1 + power_2 + power_3 + power_4 + power_5;
 
+							std::cout << "Distance : " << rji << "    " << "Exchange value : " << J << "\n";
+
 							// Neighbour spin
 							sjx = x_spin_array[j];
 							sjy = y_spin_array[j];
