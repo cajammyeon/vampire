@@ -204,7 +204,7 @@ namespace sld{
              			if(rji_sqr < r_sqr_cut)
              			{   
 							double power_0, power_1, power_2, power_3, power_4, power_5, power_6, power_7, power_8, power_9;
-							int rji_1, rji_2, rji_3, rji_4, rji_5, rji_6, rji_7, rji_8, rji_9;
+							double rji_1, rji_2, rji_3, rji_4, rji_5, rji_6, rji_7, rji_8, rji_9;
 							double J_prime;
 
 							count_int++;
@@ -218,7 +218,7 @@ namespace sld{
 							// y = (-11316.65343353834) + (29163.241792696626) * (x ** 1) + (-13588.009547029487) * (x ** 2) + (-32768.34075295124) * (x ** 3) 
 							// + (55659.7767532429) * (x ** 4) + (-39910.57897518696) * (x ** 5) + (16094.681469038807) * (x ** 6)
 							// + (-3793.6766464869665) * (x ** 7) + (489.52895044372053) * (x ** 8) + (-26.79259435916174) * (x ** 9)
-							rji_1 = rji;
+							rji_1 = rji / 2.995; // Unit conversion - Angstrom to lattice parameter
 							rji_2 = rji_1 * rji_1;
 							rji_3 = rji_1 * rji_2;
 							rji_4 = rji_2 * rji_2;
@@ -240,7 +240,7 @@ namespace sld{
 							power_9 = (-26.79259435916174)  * rji_9;
 							J       = power_0 + power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
 
-							std::cout << "Distance : " << rji << "    " << "Exchange value : " << J << "\n";
+							std::cout << "Distance (A) : " << rji << "    Distance (lattice param) : " << rji_1 << "    Exchange value : " << J << "\n";
 
 							// Neighbour spin
 							sjx = x_spin_array[j];
