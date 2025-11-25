@@ -143,10 +143,8 @@ namespace sld{
 				// Material type : 0 = Fe, 1 = Rh
 				const unsigned int imat = atoms::type_array[i];
 
-				// J0 : not used in the FeRh calculation
-				// TODO : Remove J0 definition
 				double exch_J0 = sld::internal::mp[imat].J0_ms.get(); 
-				double exch_J0_prime = sld::internal::mp[imat].J0_prime.get() / 1.602176634e-19;
+				double exch_J0_prime = sld::internal::mp[imat].J0_prime.get() / 1.602176634e-19; // eV * 1.60e-19 = J
 				int count_int = 0;
 				
 				// Forces
@@ -215,10 +213,11 @@ namespace sld{
 							// Inverse of distance
                  			inv_rji = 1.0 / rji;
 							
-							// y = (-11316.65343353834) + (29163.241792696626) * (x ** 1) + (-13588.009547029487) * (x ** 2) + (-32768.34075295124) * (x ** 3) 
-							// + (55659.7767532429) * (x ** 4) + (-39910.57897518696) * (x ** 5) + (16094.681469038807) * (x ** 6)
-							// + (-3793.6766464869665) * (x ** 7) + (489.52895044372053) * (x ** 8) + (-26.79259435916174) * (x ** 9)
-							rji_1 = rji / 2.995; // Unit conversion - Angstrom to lattice parameter
+							// y = (-1.8127184045080406e-18) + (1.5593031048812003e-18) * (x ** 1) + (-2.42147037661279e-19) * (x ** 2) 
+							// + (-1.9561888536826468e-19) * (x ** 3) + (1.1086992439638648e-19) * (x ** 4) + (-2.653852998916467e-20) * (x ** 5) 
+							// + (3.5729356220225486e-21) * (x ** 6) + (-2.811710593870184e-22) * (x ** 7) + (1.2113304411151885e-23) * (x ** 8) 
+							// + (-2.2134848763718677e-25) * (x ** 9)
+							rji_1 = rji; 
 							rji_2 = rji_1 * rji_1;
 							rji_3 = rji_1 * rji_2;
 							rji_4 = rji_2 * rji_2;
@@ -228,19 +227,19 @@ namespace sld{
 							rji_8 = rji_4 * rji_4;
 							rji_9 = rji_4 * rji_5;
 
-							power_0 = (-11316.65343353834);
-							power_1 = (29163.241792696626)  * rji_1;
-							power_2 = (-13588.009547029487) * rji_2;
-							power_3 = (-32768.34075295124)  * rji_3;
-							power_4 = (55659.7767532429)    * rji_4;
-							power_5 = (-39910.57897518696)  * rji_5;
-							power_6 = (16094.681469038807)  * rji_6;
-							power_7 = (-3793.6766464869665) * rji_7;
-							power_8 = (489.52895044372053)  * rji_8;
-							power_9 = (-26.79259435916174)  * rji_9;
+							power_0 = (-1.8127184045080406e-18);
+							power_1 = (1.5593031048812003e-18)   * rji_1;
+							power_2 = (-2.42147037661279e-19)    * rji_2;
+							power_3 = (-1.9561888536826468e-19)  * rji_3;
+							power_4 = (1.1086992439638648e-19)   * rji_4;
+							power_5 = (-2.653852998916467e-20)   * rji_5;
+							power_6 = (3.5729356220225486e-21)   * rji_6;
+							power_7 = (-2.811710593870184e-22)   * rji_7;
+							power_8 = (1.2113304411151885e-23)   * rji_8;
+							power_9 = (-2.2134848763718677e-25)  * rji_9;
 							J       = power_0 + power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
 
-							std::cout << "Distance (A) : " << rji << "    Distance (lattice param) : " << rji_1 << "    Exchange value : " << J << "\n";
+							std::cout << "Distance (A) : " << rji_1 << "    Exchange value : " << J << "\n";
 
 							// Neighbour spin
 							sjx = x_spin_array[j];
@@ -257,17 +256,18 @@ namespace sld{
                  			si_dot_sj = (sx * sjx) + (sy * sjy) + (sz * sjz);
 							
 							// Exchange force - component
-							power_1 = (29163.241792696626);
-							power_2 = (-13588.009547029487) * rji_1 * 2;
-							power_3 = (-32768.34075295124)  * rji_2 * 3;
-							power_4 = (55659.7767532429)    * rji_3 * 4;
-							power_5 = (-39910.57897518696)  * rji_4 * 5;
-							power_6 = (16094.681469038807)  * rji_5 * 6;
-							power_7 = (-3793.6766464869665) * rji_6 * 7;
-							power_8 = (489.52895044372053)  * rji_7 * 8;
-							power_9 = (-26.79259435916174)  * rji_8 * 9;
+							power_1 = (1.5593031048812003e-18)   * 1;
+							power_2 = (-2.42147037661279e-19)    * rji_1 * 2;
+							power_3 = (-1.9561888536826468e-19)  * rji_2 * 3;
+							power_4 = (1.1086992439638648e-19)   * rji_3 * 4;
+							power_5 = (-2.653852998916467e-20)   * rji_4 * 5;
+							power_6 = (3.5729356220225486e-21)   * rji_5 * 6;
+							power_7 = (-2.811710593870184e-22)   * rji_6 * 7;
+							power_8 = (1.2113304411151885e-23)   * rji_7 * 8;
+							power_9 = (-2.2134848763718677e-25)  * rji_8 * 9;
 							J_prime = power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
-
+							
+							// Normalised force on components
 							fx += (J_prime * si_dot_sj * dx * inv_rji);
 							fy += (J_prime * si_dot_sj * dy * inv_rji);
 							fz += (J_prime * si_dot_sj * dz * inv_rji);
