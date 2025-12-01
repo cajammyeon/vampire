@@ -164,8 +164,6 @@ namespace sld
 				sy = y_spin_array[i];
 				sz = z_spin_array[i];
 
-				
-
           		for( int n = nbr_start; n < nbr_end; ++n)
 				{
 
@@ -177,38 +175,82 @@ namespace sld
 						dy = -y_coord_array[j] + ry;
 						dz = -z_coord_array[j] + rz;
 
-						dx = sld::PBC_wrap( dx, cs::system_dimensions[0], cs::pbc[0]);
-						dy = sld::PBC_wrap( dy, cs::system_dimensions[1], cs::pbc[1]);
-						dz = sld::PBC_wrap( dz, cs::system_dimensions[2], cs::pbc[2]);
+						dx = sld::PBC_wrap(dx, cs::system_dimensions[0], cs::pbc[0]);
+						dy = sld::PBC_wrap(dy, cs::system_dimensions[1], cs::pbc[1]);
+						dz = sld::PBC_wrap(dz, cs::system_dimensions[2], cs::pbc[2]);
 
 
-						rji_sqr = dx*dx + dy*dy + dz*dz;
+						rji_sqr = (dx*dx) + (dy*dy) + (dz*dz);
 
              			if( rji_sqr < r_sqr_cut)
             			{   
+							double power_0, power_1, power_2, power_3, power_4, power_5, power_6, power_7, power_8, power_9;
+							double rji_1, rji_2, rji_3, rji_4, rji_5, rji_6, rji_7, rji_8, rji_9;
+							double J_prime, J_init;
 
                  			rji = sqrt(rji_sqr);
                  			inv_rji = 1.0/ rji;
 
-                 			y = (1.0 - rji * exch_inv_rcut);
-                 			J = exch_J0 * y * y * y;
+                 			// y = (-1.8127184045080406e-18) + (1.5593031048812003e-18) * (x ** 1) + (-2.42147037661279e-19) * (x ** 2) + 
+							// (-1.9561888536826468e-19) * (x ** 3) + (1.1086992439638648e-19) * (x ** 4) + (-2.653852998916467e-20) * (x ** 5) + 
+							// (3.5729356220225486e-21) * (x ** 6) + (-2.811710593870184e-22) * (x ** 7) + (1.2113304411151885e-23) * (x ** 8) + 
+							// (-2.2134848763718677e-25) * (x ** 9)
+							rji_1 = rji; 
+							rji_2 = rji_1 * rji_1;
+							rji_3 = rji_1 * rji_2;
+							rji_4 = rji_2 * rji_2;
+							rji_5 = rji_2 * rji_3;
+							rji_6 = rji_3 * rji_3;
+							rji_7 = rji_3 * rji_4;
+							rji_8 = rji_4 * rji_4;
+							rji_9 = rji_4 * rji_5;
 
+							power_0 = (-1.8127184045080406e-18);
+							power_1 = (1.5593031048812003e-18)  * rji_1;
+							power_2 = (-2.42147037661279e-19)   * rji_2;
+							power_3 = (-1.9561888536826468e-19) * rji_3;
+							power_4 = (1.1086992439638648e-19)  * rji_4;
+							power_5 = (-2.653852998916467e-20)  * rji_5;
+							power_6 = (3.5729356220225486e-21)  * rji_6;
+							power_7 = (-2.811710593870184e-22)  * rji_7;
+							power_8 = (1.2113304411151885e-23)  * rji_8;
+							power_9 = (-2.2134848763718677e-25) * rji_9;
+							J_init  = power_0 + power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
+							J       = J_init * exch_J0;
+
+							std::cout << "Distance (A) : " << rji_1 << "    J_value : " << J << "\n";
+
+							// Neighbour spin
 							sjx = x_spin_array[j];
 							sjy = y_spin_array[j];
 							sjz = z_spin_array[j];
-
+							
+							// Field calculation - component
 							hx += J * sjx ;
 							hy += J * sjy ;
 							hz += J * sjz ;
 							sumJ += J;
 
-                 			si_dot_sj = sx * sjx + sy * sjy + sz * sjz;
+							// (S_i . S_j)
+                 			si_dot_sj = (sx * sjx) + (sy * sjy) + (sz * sjz);
 
-							f_exch = -exch_J0_prime * y * y;
-
-							fx += f_exch * dx *  (si_dot_sj)* inv_rji;
-							fy += f_exch * dy *  (si_dot_sj)* inv_rji;
-							fz += f_exch * dz *  (si_dot_sj) * inv_rji;
+							// Exchange force - component
+							power_1 = (1.5593031048812003e-18)   * 1;
+							power_2 = (-2.42147037661279e-19)    * rji_1 * 2;
+							power_3 = (-1.9561888536826468e-19)  * rji_2 * 3;
+							power_4 = (1.1086992439638648e-19)   * rji_3 * 4;
+							power_5 = (-2.653852998916467e-20)   * rji_4 * 5;
+							power_6 = (3.5729356220225486e-21)   * rji_5 * 6;
+							power_7 = (-2.811710593870184e-22)   * rji_6 * 7;
+							power_8 = (1.2113304411151885e-23)   * rji_7 * 8;
+							power_9 = (-2.2134848763718677e-25)  * rji_8 * 9;
+							J_prime = power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
+							std::cout << "Distance (A) : " << rji_1 << "    J_prime : " << J_prime << "\n";
+							
+							// Normalised force on components
+							fx += (J_prime * si_dot_sj * dx * inv_rji);
+							fy += (J_prime * si_dot_sj * dy * inv_rji);
+							fz += (J_prime * si_dot_sj * dz * inv_rji);
 
 							energy += J *  (si_dot_sj);
              			}
@@ -223,8 +265,8 @@ namespace sld
 				fields_array_y[i] += hy;
 				fields_array_z[i] += hz;
 
-				sld::internal::sumJ[i]=sumJ;
-				sld::internal::exch_eng[i]=-0.5*energy;
+				sld::internal::sumJ[i] = sumJ;
+				sld::internal::exch_eng[i] = -0.5 * energy;
    			}
    			return;
 		}
