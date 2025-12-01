@@ -95,9 +95,9 @@ namespace sld{
              mp_t (const unsigned int max_materials = 100){
                 mass.set(5.7915e-3);
                 V0.set(0.15);
-                J0.set(0.904);
-                J0_prime.set(3*0.904/7.8);
-                J0_ms.set(0.904/2.04028e-23);
+                J0.set(1);
+                J0_prime.set(1 / (1.602176634e-19));
+                J0_ms.set(1 / 2.04028e-23);
                 C0.set(0.5);
                 C0_ms.set(0.5/2.04028e-23);
                 F_th_sigma.set(1.0);

@@ -130,7 +130,7 @@ namespace sld{
 			double rji_sqr, rji, inv_rji,  inv_rji2;
 			double y, f_exch,  energy = 0.0;
 			double exch_J0 = sld::internal::mp[0].J0_ms.get(); 
-			double exch_J0_prime = sld::internal::mp[0].J0_prime.get() / 1.602176634e-19; 
+			double exch_J0_prime = sld::internal::mp[0].J0_prime.get(); 
 			double J;
 			int j;
 			double r_sqr_cut = sld::internal::r_cut_fields * sld::internal::r_cut_fields;
@@ -144,9 +144,9 @@ namespace sld{
 				const unsigned int imat = atoms::type_array[i];
 
 				double exch_J0 = sld::internal::mp[imat].J0_ms.get(); 
-				double exch_J0_prime = sld::internal::mp[imat].J0_prime.get() / 1.602176634e-19; // eV * 1.60e-19 = J
+				double exch_J0_prime = sld::internal::mp[imat].J0_prime.get();
 				int count_int = 0;
-				
+								
 				// Forces
 				fx = 0.0;
 				fy = 0.0;
@@ -203,7 +203,7 @@ namespace sld{
              			{   
 							double power_0, power_1, power_2, power_3, power_4, power_5, power_6, power_7, power_8, power_9;
 							double rji_1, rji_2, rji_3, rji_4, rji_5, rji_6, rji_7, rji_8, rji_9;
-							double J_prime;
+							double J_prime, J_init;
 
 							count_int++;
 							
@@ -213,10 +213,10 @@ namespace sld{
 							// Inverse of distance
                  			inv_rji = 1.0 / rji;
 							
-							// y = (-1.8127184045080406e-18) + (1.5593031048812003e-18) * (x ** 1) + (-2.42147037661279e-19) * (x ** 2) 
-							// + (-1.9561888536826468e-19) * (x ** 3) + (1.1086992439638648e-19) * (x ** 4) + (-2.653852998916467e-20) * (x ** 5) 
-							// + (3.5729356220225486e-21) * (x ** 6) + (-2.811710593870184e-22) * (x ** 7) + (1.2113304411151885e-23) * (x ** 8) 
-							// + (-2.2134848763718677e-25) * (x ** 9)
+							// y = (-1.8127184045080406e-18) + (1.5593031048812003e-18) * (x ** 1) + (-2.42147037661279e-19) * (x ** 2) + 
+							// (-1.9561888536826468e-19) * (x ** 3) + (1.1086992439638648e-19) * (x ** 4) + (-2.653852998916467e-20) * (x ** 5) + 
+							// (3.5729356220225486e-21) * (x ** 6) + (-2.811710593870184e-22) * (x ** 7) + (1.2113304411151885e-23) * (x ** 8) + 
+							// (-2.2134848763718677e-25) * (x ** 9)
 							rji_1 = rji; 
 							rji_2 = rji_1 * rji_1;
 							rji_3 = rji_1 * rji_2;
@@ -228,16 +228,17 @@ namespace sld{
 							rji_9 = rji_4 * rji_5;
 
 							power_0 = (-1.8127184045080406e-18);
-							power_1 = (1.5593031048812003e-18)   * rji_1;
-							power_2 = (-2.42147037661279e-19)    * rji_2;
-							power_3 = (-1.9561888536826468e-19)  * rji_3;
-							power_4 = (1.1086992439638648e-19)   * rji_4;
-							power_5 = (-2.653852998916467e-20)   * rji_5;
-							power_6 = (3.5729356220225486e-21)   * rji_6;
-							power_7 = (-2.811710593870184e-22)   * rji_7;
-							power_8 = (1.2113304411151885e-23)   * rji_8;
-							power_9 = (-2.2134848763718677e-25)  * rji_9;
-							J       = power_0 + power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
+							power_1 = (1.5593031048812003e-18)  * rji_1;
+							power_2 = (-2.42147037661279e-19)   * rji_2;
+							power_3 = (-1.9561888536826468e-19) * rji_3;
+							power_4 = (1.1086992439638648e-19)  * rji_4;
+							power_5 = (-2.653852998916467e-20)  * rji_5;
+							power_6 = (3.5729356220225486e-21)  * rji_6;
+							power_7 = (-2.811710593870184e-22)  * rji_7;
+							power_8 = (1.2113304411151885e-23)  * rji_8;
+							power_9 = (-2.2134848763718677e-25) * rji_9;
+							J_init  = power_0 + power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
+							J       = J_init * exch_J0;
 
 							std::cout << "Distance (A) : " << rji_1 << "    Exchange value : " << J << "\n";
 
