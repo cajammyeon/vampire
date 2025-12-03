@@ -161,7 +161,7 @@ void spin_temp_statistic_t::calculate_spin_temp(const std::vector<double>& sx, /
 
       // get atomic moment
 		const double mu = mm[atom];
-
+      
 		// Store local spin in Sand local field in H
 		const double S[3] = {sx[atom],         sy[atom],         sz[atom]        };
 		const double B[3] = {bxs[atom], bys[atom], bzs[atom]};

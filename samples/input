@@ -20,7 +20,7 @@ material:file = FeRh.mat
 #------------------------------------------
 # Program and integrator details
 #------------------------------------------
-sim:program = field-cool
+sim:program = benchmark
 sim:integrator = spin-lattice
 
 #------------------------------------------
