@@ -123,13 +123,13 @@ void spin_temp_statistic_t::calculate_spin_temp(const std::vector<double>& sx, /
    //double SH=0.0;
 
    // ASD version
-   sim::calculate_spin_fields(0, num_atoms);
+   // sim::calculate_spin_fields(0, num_atoms);
 
    // SLD version
    std::fill(SxH2.begin(),SxH2.end(),0.0);
    std::fill(SH.begin(),SH.end(),0.0);
 
-   /*std::fill(atoms::x_total_spin_field_array.begin(), atoms::x_total_spin_field_array.end(), 0.0);
+   std::fill(atoms::x_total_spin_field_array.begin(), atoms::x_total_spin_field_array.end(), 0.0);
    std::fill(atoms::y_total_spin_field_array.begin(), atoms::y_total_spin_field_array.end(), 0.0);
    std::fill(atoms::z_total_spin_field_array.begin(), atoms::z_total_spin_field_array.end(), 0.0);
 
@@ -150,7 +150,7 @@ void spin_temp_statistic_t::calculate_spin_temp(const std::vector<double>& sx, /
                      atoms::z_total_spin_forces_array,
                      atoms::x_total_spin_field_array,
                      atoms::y_total_spin_field_array,
-                     atoms::z_total_spin_field_array);*/
+                     atoms::z_total_spin_field_array);
 
 
 
@@ -161,7 +161,10 @@ void spin_temp_statistic_t::calculate_spin_temp(const std::vector<double>& sx, /
 
       // get atomic moment
 		const double mu = mm[atom];
-      
+
+      // TODO : resolve
+      // ISSUE : field value is too small to cause significant disturbance in the spin
+
 		// Store local spin in Sand local field in H
 		const double S[3] = {sx[atom],         sy[atom],         sz[atom]        };
 		const double B[3] = {bxs[atom], bys[atom], bzs[atom]};

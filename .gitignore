@@ -103,5 +103,7 @@ run/unit-cell-creator
 .cache/
 .clang-tidy
 
+*.sh
+
 temp/*
 #EOF
