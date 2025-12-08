@@ -217,9 +217,7 @@ namespace sld
 							power_8 = (1.291292480059483e-23)   * rji_8;
 							power_9 = (-2.3323729478397598e-25) * rji_9;
 							J       = power_0 + power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
-							J       = -J * exch_J0;
-
-							// std::cout << "Distance (A) : " << rji_1 << "    J_value : " << J << "\n";
+							J       = J * exch_J0;
 
 							// Neighbour spin
 							sjx = x_spin_array[j];
@@ -246,8 +244,7 @@ namespace sld
 							power_8 = (1.291292480059483e-23)   * rji_7 * 8;
 							power_9 = (-2.3323729478397598e-25) * rji_8 * 9;
 							J_prime = power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
-							J_prime = -J_prime;
-							// std::cout << "Distance (A) : " << rji_1 << "    J_prime : " << J_prime << "\n";
+							J_prime = J_prime;
 							
 							// Normalised force on components
 							fx += (J_prime * si_dot_sj * dx * inv_rji);
