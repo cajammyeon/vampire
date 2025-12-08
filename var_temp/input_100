@@ -55,7 +55,7 @@ exchange:four-spin-cutoff-2 = 1.414
 config:atoms
 config:atoms-output-rate = 10
 
-output:time-series
+output:real-time
 output:temperature
 output:lattice-temperature
 output:spin-temperature
