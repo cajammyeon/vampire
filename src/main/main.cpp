@@ -35,7 +35,7 @@ int simulate_system();
 /// Main function for vampire
 /// Prints out program header and calls main program routines
 int main(int argc, char* argv[]){
-  vout::output_file_name="output"; // default output file name
+  vout::output_file_name = std::string(argv[2]); // default output file name
    // For parallel execution intialise MPI
    vmpi::initialise(argc, argv);
 
@@ -104,7 +104,7 @@ int main(int argc, char* argv[]){
    #endif
 
    // Initialise system
-   mp::initialise(vmain::internal::input_file_name);
+   mp::initialise(std::string(argv[1]));
 
    // Create system
    cs::create();
