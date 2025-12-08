@@ -46,7 +46,7 @@ namespace exchange
 			double x_a,y_a,z_a;
 			double x_b,y_b,z_b;
 			double x_c,y_c,z_c;
-			int k1=1, k2=1,k3=1;
+			int k1 = 1, k2 = 1,k3 = 1;
 
 			//vectors to store the nearest and next nearest neighbours
 			std::vector<int> first_neigh(0);
