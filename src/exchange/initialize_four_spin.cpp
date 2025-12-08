@@ -148,8 +148,6 @@ namespace exchange
 							d2=std::sqrt(std::pow(((x_c-x_b)/ucx),2)+std::pow(((y_c-y_b)/ucy),2)+std::pow(((z_c-z_b)/ucz),2));
 							d3=std::sqrt(std::pow(((x_a-x_c)/ucx),2)+std::pow(((y_a-y_c)/ucy),2)+std::pow(((z_a-z_c)/ucz),2));
 							
-							std::cout << "Cut off nnn : " << nnn_distance << "    d1 : " << d1 << "    d2 : " << d2 << "    d3 : " << d3 << std::endl;
-
 							// Does not pass this condition ? something to do with nnn_distance
 							if (((d1 <= nnn_distance + 0.01) && (d1 >= nnn_distance - 0.01)) && ((d2 <= nnn_distance + 0.01) && (d2 >= nnn_distance - 0.01)) && ((d3 <= nnn_distance + 0.01) && (d3 >= nnn_distance - 0.01)))
 							{
