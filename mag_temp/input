@@ -50,8 +50,8 @@ spin-lattice:coupling = pseudodipolar
 spin-lattice:potential = harmonic
 
 exchange:interaction-range = 3
-exchange:four-spin-cutoff-1 = 1.0
-exchange:four-spin-cutoff-2 = 1.404
+exchange:four-spin-cutoff-1 = 1
+exchange:four-spin-cutoff-2 = 1.414
 
 #------------------------------------------
 # Data output
