@@ -216,8 +216,8 @@ namespace sld
 							power_7 = (-3.043052187202497e-22)  * rji_7;
 							power_8 = (1.291292480059483e-23)   * rji_8;
 							power_9 = (-2.3323729478397598e-25) * rji_9;
-							J_init  = power_0 + power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
-							J       = J_init * exch_J0;
+							J       = power_0 + power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
+							J       = -J * exch_J0;
 
 							// std::cout << "Distance (A) : " << rji_1 << "    J_value : " << J << "\n";
 
@@ -246,6 +246,7 @@ namespace sld
 							power_8 = (1.291292480059483e-23)   * rji_7 * 8;
 							power_9 = (-2.3323729478397598e-25) * rji_8 * 9;
 							J_prime = power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
+							J_prime = -J_prime;
 							// std::cout << "Distance (A) : " << rji_1 << "    J_prime : " << J_prime << "\n";
 							
 							// Normalised force on components

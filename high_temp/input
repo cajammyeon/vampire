@@ -53,6 +53,7 @@ output:real-time
 output:temperature
 output:magnetisation
 output:mean-magnetisation-length
+output:total-energy
 
 output:lattice-temperature
 output:spin-temperature

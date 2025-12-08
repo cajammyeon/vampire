@@ -29,8 +29,6 @@ sim:integrator = spin-lattice
 sim:cooling-function = linear
 sim:cooling-time = 0.1 !ns
 
-
-
 sim:maximum-temperature = 800
 sim:minimum-temperature = 0
 
@@ -52,8 +50,8 @@ spin-lattice:coupling = pseudodipolar
 spin-lattice:potential = harmonic
 
 exchange:interaction-range = 3
-# exchange:four-spin-cutoff-1 = 1.0
-# exchange:four-spin-cutoff-2 = 1.5
+exchange:four-spin-cutoff-1 = 1.0
+exchange:four-spin-cutoff-2 = 1.404
 
 #------------------------------------------
 # Data output
@@ -66,5 +64,6 @@ output:real-time
 output:temperature
 output:magnetisation
 
+output:total-energy
 output:lattice-temperature
 output:spin-temperature
