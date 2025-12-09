@@ -158,8 +158,6 @@ namespace exchange
 								four_spin_neighbour_list_array_k.push_back(first_neigh[b]);
 								four_spin_neighbour_list_array_l.push_back(first_neigh[c]);
 
-								std::cout << "Supposedly print out the interaction quartet \n";
-
 								four_spin_neighbour_list_array_i.push_back(first_neigh[a]);
 								four_spin_neighbour_list_array_j.push_back(first_neigh[b]);
 								four_spin_neighbour_list_array_k.push_back(first_neigh[c]);

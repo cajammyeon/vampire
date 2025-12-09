@@ -47,7 +47,7 @@ namespace exchange
 
 		if (!internal::enable_fourspin) return 0.0;
 
-		double energy=0.0;
+		double energy = 0.0;
 
 		const double six = atoms::x_spin_array[atom];
 		const double siy = atoms::y_spin_array[atom];
@@ -80,9 +80,8 @@ namespace exchange
 			const double sj_dot_sl = dot_product2(sjx,sjy,sjz,slx,sly,slz);
 			const double Jij = internal::four_spin_exchange_list[nn];
 
-			energy = energy - 4.0*Jij/12.0*(si_dot_sj*sk_dot_sl + si_dot_sk*sj_dot_sl + si_dot_sl*sj_dot_sk);
+			energy = (energy - 4.0 * Jij / 12.0 * (si_dot_sj*sk_dot_sl + si_dot_sk*sj_dot_sl + si_dot_sl*sj_dot_sk));
 		}
-
-		return 0;
+		return energy;
 	}
 }

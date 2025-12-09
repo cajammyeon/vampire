@@ -147,6 +147,8 @@ namespace sld
 				int nbr_start = neighbour_list_start_index[i];
 				int nbr_end = neighbour_list_end_index[i]+1;
 
+				std::cout << "Material type : " << imat << "    J0 : " << exch_J0 << std::endl;
+
 				fx = 0.0;
 				fy = 0.0;
 				fz = 0.0;

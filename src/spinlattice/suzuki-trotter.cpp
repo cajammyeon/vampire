@@ -282,7 +282,8 @@ namespace sld{
                         sld::internal::potential_eng);
 
 
-     //update position, Velocity
+      //update position, Velocity
+      // TODO : comment out for fixed lattice simulation
       for(int atom=0;atom<num_atoms;atom++){
 
       const unsigned int imat = atoms::type_array[atom];
@@ -352,7 +353,7 @@ namespace sld{
                           sld::internal::forces_array_z,
                           sld::internal::potential_eng);
 
-
+      // TODO : comment out for fixed lattice simulation
       for(int atom=0;atom<num_atoms;atom++){
 
         const unsigned int imat = atoms::type_array[atom];

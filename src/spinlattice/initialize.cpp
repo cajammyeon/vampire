@@ -238,8 +238,8 @@ namespace sld{
          sld::internal::mp[mat].C0_ms.set(sld::internal::mp[mat].C0.get()/mp::material[mat].mu_s_SI);
 
          // TODO  : verify adjustment
-         sld::internal::mp[mat].J0_ms.set(1 / mp::material[mat].mu_s_SI);
-         sld::internal::mp[mat].J0_prime.set(1);
+         sld::internal::mp[mat].J0_ms.set(sld::internal::mp[mat].J0.get() / mp::material[mat].mu_s_SI);
+         sld::internal::mp[mat].J0_prime.set(sld::internal::mp[mat].J0.get());
 
          sld::internal::mp[mat].F_th_sigma.set(sqrt(2.0*sld::internal::mp[mat].damp_lat.get()*constants::kB_eV / (sld::internal::mp[mat].mass.get()*mp::dt_SI*1e12)));
          sld::internal::mp[mat].F_th_sigma_eq.set(sqrt(2.0*sld::internal::mp[mat].eq_damp_lat.get()*constants::kB_eV / (sld::internal::mp[mat].mass.get()*mp::dt_SI*1e12)));
