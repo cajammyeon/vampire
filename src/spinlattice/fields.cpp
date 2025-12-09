@@ -141,13 +141,11 @@ namespace sld
 
           		const unsigned int imat = atoms::type_array[i];
 
-          		double exch_J0 = sld::internal::mp[imat].J0_ms.get();          // TODO : change the definition of J0_ms
-          		double exch_J0_prime = sld::internal::mp[imat].J0_prime.get(); // TODO : change the definition of J0_prime
+          		double exch_J0 = sld::internal::mp[imat].J0_ms.get();          
+          		double exch_J0_prime = sld::internal::mp[imat].J0_prime.get();
 				
 				int nbr_start = neighbour_list_start_index[i];
 				int nbr_end = neighbour_list_end_index[i]+1;
-
-				std::cout << "Material type : " << imat << "    J0 : " << exch_J0 << std::endl;
 
 				fx = 0.0;
 				fy = 0.0;
@@ -172,6 +170,7 @@ namespace sld
 				{
 
             		j = neighbour_list_array[n];
+					if (atoms::type_array[j]) continue;
 
 					if (j != i)
 					{
@@ -257,7 +256,8 @@ namespace sld
              			}
           			}
        			}
-
+				std::cout << "Field : " << hx << " " << hy << " " << hz << std::endl;
+				
 				forces_array_x[i] += fx;
 				forces_array_y[i] += fy;
 				forces_array_z[i] += fz;
