@@ -141,6 +141,8 @@ namespace sld
 
           		const unsigned int imat = atoms::type_array[i];
 
+				if (imat == 1) continue;
+
           		double exch_J0 = sld::internal::mp[imat].J0_ms.get();          
           		double exch_J0_prime = sld::internal::mp[imat].J0_prime.get();
 				
@@ -256,8 +258,7 @@ namespace sld
              			}
           			}
        			}
-				std::cout << "Field : " << hx << " " << hy << " " << hz << std::endl;
-				
+								
 				forces_array_x[i] += fx;
 				forces_array_y[i] += fy;
 				forces_array_z[i] += fz;
