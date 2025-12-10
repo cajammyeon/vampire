@@ -498,7 +498,7 @@ namespace sld
 			for (int i = start_index; i<end_index; i++)
 			{
 				// Remove spin noise for a moment
-				if (atoms::type_array[i] | !atoms::type_array[i]) continue;
+				if (atoms::type_array[i]) continue;
 					
 				const unsigned int imat = atoms::type_array[i];
 				double lambda=mp::material[imat].alpha;
