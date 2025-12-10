@@ -162,7 +162,7 @@ namespace stats
 		// calculate contributions of spins to each magetization category
 		for(int atom =  0; atom < num_atoms; ++atom)
 		{
-			if (atoms::type_array[atom]) continue;
+			if (atoms::type_array[atom] == 1) continue;
 
 			const int mask_id = mask[atom]; // get mask id
 

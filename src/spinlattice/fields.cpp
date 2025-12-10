@@ -172,7 +172,8 @@ namespace sld
 				{
 
             		j = neighbour_list_array[n];
-					if (atoms::type_array[j]) continue;
+
+					if (atoms::type_array[j] == 1) continue;
 
 					if (j != i)
 					{
