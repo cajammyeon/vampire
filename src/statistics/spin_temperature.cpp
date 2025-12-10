@@ -163,12 +163,13 @@ namespace stats
 		for(int atom =  0; atom < num_atoms; ++atom)
 		{
 			const int mask_id = mask[atom]; // get mask id
-
-			if (atoms::type_array[atom] == 1) {
+			
+			if (atoms::type_array[atom] == 1) 
+			{
 				spin_temp[mask_id] = 0;
 				continue;
 			};
-
+			
 			// get atomic moment
 			const double mu = mm[atom];
 
@@ -179,8 +180,8 @@ namespace stats
 			double SxHx = S[1]*B[2]-S[2]*B[1];
 			double SxHy = S[2]*B[0]-S[0]*B[2];
 			double SxHz = S[0]*B[1]-S[1]*B[0];
-			SxH2[mask_id] = SxH2[mask_id] + mu*(SxHx*SxHx + SxHy*SxHy + SxHz*SxHz);
-			SH[mask_id]   = SH[mask_id] + S[0]*B[0] + S[1]*B[1] + S[2]*B[2];
+			SxH2[mask_id] += mu*(SxHx*SxHx + SxHy*SxHy + SxHz*SxHz);
+			SH[mask_id]   += S[0]*B[0] + S[1]*B[1] + S[2]*B[2];
 
 			spin_temp[mask_id] = SxH2[mask_id] / SH[mask_id];
 		}
@@ -257,7 +258,7 @@ namespace stats
 			}
 			else 
 			{
-				result << 0.5 * constants::muB / constants::kB * spin_temp[mask_id] / vmpi::num_processors;
+				result << 0.5 * constants::muB / constants::kB * (spin_temp[mask_id]) / vmpi::num_processors;
 			}
 		}
 

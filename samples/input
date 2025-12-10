@@ -44,8 +44,8 @@ sim:time-step = 1 !fs
 #------------------------------------------
 # SLD config
 #------------------------------------------
-spin-lattice:potential-cutoff-range = 8.2 !A
-spin-lattice:fields-cutoff-range = 10.0 !A
+spin-lattice:potential-cutoff-range = 8.15 !A
+spin-lattice:fields-cutoff-range = 10 !A
 spin-lattice:coupling = pseudodipolar
 spin-lattice:potential = harmonic
 

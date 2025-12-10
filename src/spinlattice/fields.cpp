@@ -140,20 +140,20 @@ namespace sld
           		const unsigned int imat = atoms::type_array[i];
 
 				if (imat == 1) {
-					forces_array_x[i] = 0;
-					forces_array_y[i] = 0;
-					forces_array_z[i] = 0;
+					forces_array_x[i] = 0.0;
+					forces_array_y[i] = 0.0;
+					forces_array_z[i] = 0.0;
 
-					fields_array_x[i] = 0;
-					fields_array_y[i] = 0;
-					fields_array_z[i] = 0;
+					fields_array_x[i] = 0.0;
+					fields_array_y[i] = 0.0;
+					fields_array_z[i] = 0.0;
 
-					sld::internal::sumJ[i] = 0;
-					sld::internal::exch_eng[i] = 0;
+					sld::internal::sumJ[i] = 0.0;
+					sld::internal::exch_eng[i] = 0.0;
 					continue;
 				}
 
-          		double exch_J0 = sld::internal::mp[imat].J0_ms.get();          
+          		double exch_J0 = sld::internal::mp[imat].J0_ms.get();
           		double exch_J0_prime = sld::internal::mp[imat].J0_prime.get();
 				
 				int nbr_start = neighbour_list_start_index[i];
@@ -220,6 +220,22 @@ namespace sld
 							rji_8 = rji_4 * rji_4;
 							rji_9 = rji_4 * rji_5;
 
+							// y = (-9995.020913189692) + (7442.2320375880445) * (x ** 1) + (128.00893946112885) * (x ** 2) + (-1866.0131534938985) * (x ** 3) 
+							// + (847.2933156907586) * (x ** 4) + (-189.523692271876) * (x ** 5) + (24.657597774270183) * (x ** 6) + (-1.899323784048505) * (x ** 7) 
+							// + (0.0805961373205264) * (x ** 8) + (-0.0014557526919816155) * (x ** 9)
+							/*
+							power_0 = (-9995.020913189692);
+							power_1 = (7442.2320375880445)     * rji_1;
+							power_2 = (128.00893946112885)     * rji_2;
+							power_3 = (-1866.0131534938985)    * rji_3;
+							power_4 = (847.2933156907586)      * rji_4;
+							power_5 = (-189.523692271876)      * rji_5;
+							power_6 = (24.657597774270183)     * rji_6;
+							power_7 = (-1.899323784048505)     * rji_7;
+							power_8 = (0.0805961373205264)     * rji_8;
+							power_9 = (-0.0014557526919816155) * rji_9;
+							*/
+
 							power_0 = (-1.6013789004079091e-18);
 							power_1 = (1.1923770275429103e-18)  * rji_1;
 							power_2 = (2.050929317476752e-20)   * rji_2;
@@ -258,7 +274,6 @@ namespace sld
 							power_8 = (1.291292480059483e-23)   * rji_7 * 8;
 							power_9 = (-2.3323729478397598e-25) * rji_8 * 9;
 							J_prime = power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
-							J_prime = J_prime;
 							
 							// Normalised force on components
 							fx += (J_prime * si_dot_sj * dx * inv_rji);
@@ -337,8 +352,8 @@ namespace sld
 					fields_array_y[i] = 0;
 					fields_array_z[i] = 0;
 
-					sld::internal::sumJ[i] = 0;
-					sld::internal::exch_eng[i] = 0;
+					sld::internal::sumC[i] = 0;
+					sld::internal::coupl_eng[i] = 0;
 					continue;
 				}
 
@@ -351,9 +366,11 @@ namespace sld
 				fc_x = 0.0;
 				fc_y = 0.0;
 				fc_z = 0.0;
+
 				hc_x = 0.0;
 				hc_y = 0.0;
 				hc_z = 0.0;
+
 				energy_c = 0.0;
 				sumC = 0.0;
 
@@ -470,6 +487,20 @@ namespace sld
 				const unsigned int imat = atoms::type_array[i];
 				double fact = sld::internal::mp[imat].C0.get() / 1.602176634e-19;
 				double fact_ms = sld::internal::mp[imat].C0_ms.get();
+
+				if (imat == 1) {
+					forces_array_x[i] = 0;
+					forces_array_y[i] = 0;
+					forces_array_z[i] = 0;
+
+					fields_array_x[i] = 0;
+					fields_array_y[i] = 0;
+					fields_array_z[i] = 0;
+
+					sld::internal::sumC[i] = 0;
+					sld::internal::coupl_eng[i] = 0;
+					continue;
+				}
 
 				fc_x = 0.0;
 				fc_y = 0.0;

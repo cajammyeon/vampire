@@ -363,28 +363,28 @@ namespace sld
 								sld::internal::fields_array_z);
 
 			sld::internal::add_spin_noise(atom,
-						atom+1,
-						mp::dt_SI*1e12,
-						atoms::type_array, // type for atom
-						atoms::x_spin_array,
-						atoms::y_spin_array,
-						atoms::z_spin_array,
-						sld::internal::fields_array_x,
-						sld::internal::fields_array_y,
-						sld::internal::fields_array_z,
-						Hx_th, //  vectors for fields
-						Hy_th,
-						Hz_th);
+										atom+1,
+										mp::dt_SI*1e12,
+										atoms::type_array, // type for atom
+										atoms::x_spin_array,
+										atoms::y_spin_array,
+										atoms::z_spin_array,
+										sld::internal::fields_array_x,
+										sld::internal::fields_array_y,
+										sld::internal::fields_array_z,
+										Hx_th, //  vectors for fields
+										Hy_th,
+										Hz_th);
 
 			sld::internal::cayley_update(atom,
-						atom+1,
-						cay_dt,
-						atoms::x_spin_array,
-						atoms::y_spin_array,
-						atoms::z_spin_array,
-						sld::internal::fields_array_x,
-						sld::internal::fields_array_y,
-						sld::internal::fields_array_z);
+										atom+1,
+										cay_dt,
+										atoms::x_spin_array,
+										atoms::y_spin_array,
+										atoms::z_spin_array,
+										sld::internal::fields_array_x,
+										sld::internal::fields_array_y,
+										sld::internal::fields_array_z);
    		}
 
 		std::fill(sld::internal::fields_array_x.begin(), sld::internal::fields_array_x.end(), 0.0);
@@ -414,28 +414,28 @@ namespace sld
 								sld::internal::fields_array_z);
 
 			sld::internal::add_spin_noise(atom,
-						atom+1,
-						mp::dt_SI*1e12,
-						atoms::type_array, // type for atom
-						atoms::x_spin_array,
-						atoms::y_spin_array,
-						atoms::z_spin_array,
-						sld::internal::fields_array_x,
-						sld::internal::fields_array_y,
-						sld::internal::fields_array_z,
-						Hx_th, //  vectors for fields
-						Hy_th,
-						Hz_th);
+										atom+1,
+										mp::dt_SI*1e12,
+										atoms::type_array, // type for atom
+										atoms::x_spin_array,
+										atoms::y_spin_array,
+										atoms::z_spin_array,
+										sld::internal::fields_array_x,
+										sld::internal::fields_array_y,
+										sld::internal::fields_array_z,
+										Hx_th, //  vectors for fields
+										Hy_th,
+										Hz_th);
 
 			sld::internal::cayley_update(atom,
-						atom+1,
-						cay_dt,
-						atoms::x_spin_array,
-						atoms::y_spin_array,
-						atoms::z_spin_array,
-						sld::internal::fields_array_x,
-						sld::internal::fields_array_y,
-						sld::internal::fields_array_z);
+										atom+1,
+										cay_dt,
+										atoms::x_spin_array,
+										atoms::y_spin_array,
+										atoms::z_spin_array,
+										sld::internal::fields_array_x,
+										sld::internal::fields_array_y,
+										sld::internal::fields_array_z);
 
 		}
       	return EXIT_SUCCESS;
@@ -497,7 +497,8 @@ namespace sld
 		{
 			for (int i = start_index; i<end_index; i++)
 			{
-				if (atoms::type_array[i] == 1) continue;
+				// Remove spin noise for a moment
+				if (atoms::type_array[i] | !atoms::type_array[i]) continue;
 					
 				const unsigned int imat = atoms::type_array[i];
 				double lambda=mp::material[imat].alpha;
@@ -506,8 +507,8 @@ namespace sld
 				//if during equilibration:
 				if (sim::time < sim::equilibration_time)
 				{
-					lambda=mp::material[imat].alpha_eq;
-					spin_noise=mp::material[imat].H_th_sigma_eq*sqrt(sim::temperature);
+					lambda = mp::material[imat].alpha_eq;
+					spin_noise = mp::material[imat].H_th_sigma_eq*sqrt(sim::temperature);
 				}
 
 				double Sx = x_spin_array[i];
