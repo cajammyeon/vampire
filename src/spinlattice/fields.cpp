@@ -50,8 +50,6 @@ namespace sld
 						std::vector<double>& fields_array_y,
 						std::vector<double>& fields_array_z)
 	{
-
-
 		internal::compute_exchange(start_index, end_index,
 								neighbour_list_start_index, neighbour_list_end_index,
 								type_array, neighbour_list_array,
@@ -67,6 +65,7 @@ namespace sld
 																		x_spin_array, y_spin_array, z_spin_array,
 																		forces_array_x, forces_array_y, forces_array_z,
 																		fields_array_x, fields_array_y, fields_array_z);
+
 		if(sld::internal::full_neel) internal::compute_sld_coupling_neel(start_index, end_index,
 																		neighbour_list_start_index, neighbour_list_end_index,
 																		type_array, neighbour_list_array,
@@ -77,7 +76,6 @@ namespace sld
 
 		if (sim::time > sim::equilibration_time) 
 		{
-
 			const double Hx=sim::H_vec[0]*sim::H_applied;
 			const double Hy=sim::H_vec[1]*sim::H_applied;
 			const double Hz=sim::H_vec[2]*sim::H_applied;
@@ -141,7 +139,19 @@ namespace sld
 
           		const unsigned int imat = atoms::type_array[i];
 
-				if (imat == 1) continue;
+				if (imat == 1) {
+					forces_array_x[i] = 0;
+					forces_array_y[i] = 0;
+					forces_array_z[i] = 0;
+
+					fields_array_x[i] = 0;
+					fields_array_y[i] = 0;
+					fields_array_z[i] = 0;
+
+					sld::internal::sumJ[i] = 0;
+					sld::internal::exch_eng[i] = 0;
+					continue;
+				}
 
           		double exch_J0 = sld::internal::mp[imat].J0_ms.get();          
           		double exch_J0_prime = sld::internal::mp[imat].J0_prime.get();
@@ -317,6 +327,21 @@ namespace sld
 			{
 
 				const unsigned int imat = atoms::type_array[i];
+
+				if (imat == 1) {
+					forces_array_x[i] = 0;
+					forces_array_y[i] = 0;
+					forces_array_z[i] = 0;
+
+					fields_array_x[i] = 0;
+					fields_array_y[i] = 0;
+					fields_array_z[i] = 0;
+
+					sld::internal::sumJ[i] = 0;
+					sld::internal::exch_eng[i] = 0;
+					continue;
+				}
+
 				double fact =sld::internal::mp[imat].C0.get()/1.602176634e-19;
 				double fact_ms = sld::internal::mp[imat].C0_ms.get();
 
@@ -343,10 +368,10 @@ namespace sld
 				for( int n = nbr_start; n < nbr_end; ++n)
 				{
 					j = neighbour_list_array[n];
+					if (atoms::type_array[j] == 1) continue;
 
 					if (j != i)
 					{
-
 						dx = -x_coord_array[j] + rx;
 						dy = -y_coord_array[j] + ry;
 						dz = -z_coord_array[j] + rz;
