@@ -38,45 +38,55 @@ namespace exchange
 									std::vector<double>& field_array_z)
 		{ 
 
+			// =========================================================================
+			// Memory allocation, allocate once before iteration, allow for overwrite
+			// =========================================================================
 			const int num_four_spin_neighbours = four_spin_neighbour_list_array_l.size();
+			double athird = 1.0/3.0;
 
-			// loop over all neighbours
+			int atom, natomj, natomk, natoml;
+			double Jij;
+			double sjx, sjy, sjz;
+			double skx, sky, skz;
+			double slx, sly, slz;
+			double sk_dot_sl, sj_dot_sk, sj_dot_sl;
+
+			// =========================================================================
+			// Iterate through the neighbour list for interaction calculation
+			// =========================================================================
 			for(int nn = 0; nn < num_four_spin_neighbours; ++nn)
 			{
-				const int atom = four_spin_neighbour_list_array_i[nn];
-				const int natomj = four_spin_neighbour_list_array_j[nn];
-				const int natomk = four_spin_neighbour_list_array_k[nn];
-				const int natoml = four_spin_neighbour_list_array_l[nn];
+				atom   = four_spin_neighbour_list_array_i[nn];
+				natomj = four_spin_neighbour_list_array_j[nn];
+				natomk = four_spin_neighbour_list_array_k[nn];
+				natoml = four_spin_neighbour_list_array_l[nn];
 
-				const double Jij = four_spin_exchange_list[nn];
+				Jij = four_spin_exchange_list[nn];
 
-				const double sjx = atoms::x_spin_array[natomj];
-				const double sjy = atoms::y_spin_array[natomj];
-				const double sjz = atoms::z_spin_array[natomj];
+				sjx = atoms::x_spin_array[natomj];
+				sjy = atoms::y_spin_array[natomj];
+				sjz = atoms::z_spin_array[natomj];
 
-				const double skx = atoms::x_spin_array[natomk];
-				const double sky = atoms::y_spin_array[natomk];
-				const double skz = atoms::z_spin_array[natomk];
+				skx = atoms::x_spin_array[natomk];
+				sky = atoms::y_spin_array[natomk];
+				skz = atoms::z_spin_array[natomk];
 
-				const double slx = atoms::x_spin_array[natoml];
-				const double sly = atoms::y_spin_array[natoml];
-				const double slz = atoms::z_spin_array[natoml];
+				slx = atoms::x_spin_array[natoml];
+				sly = atoms::y_spin_array[natoml];
+				slz = atoms::z_spin_array[natoml];
 
-				const double sk_dot_sl = dot_product(skx,sky,skz,slx,sly,slz);
-				const double sj_dot_sk = dot_product(skx,sky,skz,sjx,sjy,sjz);
-				const double sj_dot_sl = dot_product(sjx,sjy,sjz,slx,sly,slz);
+				sk_dot_sl = dot_product(skx,sky,skz,slx,sly,slz);
+				sj_dot_sk = dot_product(skx,sky,skz,sjx,sjy,sjz);
+				sj_dot_sl = dot_product(sjx,sjy,sjz,slx,sly,slz);
 
-				double athird = 1.0/3.0;
-
-				field_array_x[atom] = field_array_x[atom] + (Jij*athird)*(sjx*sk_dot_sl + skx*sj_dot_sl + slx*sj_dot_sk);
-				field_array_y[atom] = field_array_y[atom] + (Jij*athird)*(sjy*sk_dot_sl + sky*sj_dot_sl + sly*sj_dot_sk);
-				field_array_z[atom] = field_array_z[atom] + (Jij*athird)*(sjz*sk_dot_sl + skz*sj_dot_sl + slz*sj_dot_sk);
-
+				field_array_x[atom] += (Jij*athird) * (sjx * sk_dot_sl + skx * sj_dot_sl + slx * sj_dot_sk);
+				field_array_y[atom] += (Jij*athird) * (sjy * sk_dot_sl + sky * sj_dot_sl + sly * sj_dot_sk);
+				field_array_z[atom] += (Jij*athird) * (sjz * sk_dot_sl + skz * sj_dot_sl + slz * sj_dot_sk);
 			}
 
 			return;
 
 		}
 
-	} // end of internal namespace
-} // end of exchange namespace
+	}
+}

@@ -24,9 +24,11 @@
 #include "create.hpp"
 #include "sld.hpp"
 #include "sim.hpp"
+#include "exchange.hpp"
 
 // sld module headers
 #include "internal.hpp"
+#include "../exchange/internal.hpp"
 
 namespace sld
 {
@@ -57,6 +59,9 @@ namespace sld
 								x_spin_array, y_spin_array, z_spin_array,
 								forces_array_x, forces_array_y, forces_array_z,
 								fields_array_x, fields_array_y, fields_array_z);
+		
+		if (exchange::four_spin) exchange::internal::four_spin_exchange_fields(start_index, end_index, 
+																			fields_array_x, fields_array_y, fields_array_z);
 
 		if(sld::internal::pseudodipolar) internal::compute_sld_coupling(start_index, end_index,
 																		neighbour_list_start_index, neighbour_list_end_index,
@@ -88,13 +93,12 @@ namespace sld
 			}
 		}
 
-          
 		anisotropy::fields(atoms::x_spin_array, atoms::y_spin_array, atoms::z_spin_array, atoms::type_array,
 						fields_array_x, fields_array_y, fields_array_z,
 						start_index, end_index, sim::temperature);
-      	return;
 
-    }
+      	return;
+    }	
 
 	namespace internal
 	{
@@ -118,27 +122,47 @@ namespace sld
 							std::vector<double>& fields_array_y,
 							std::vector<double>& fields_array_z)
 		{
-
+			// =========================================================================
+			// Memory allocation, allocate one before iteration, allow rewrite
+			// =========================================================================
 			double rx, ry, rz;
 			double dx, dy, dz;
 			double sx, sy, sz;
 			double sjx, sjy,sjz;
 			double si_dot_sj;
-			double fx = 0.0, fy = 0.0, fz = 0.0;
-			double hx = 0.0, hy = 0.0, hz = 0.0;
+			double fx, fy, fz;
+			double hx, hy, hz;
 			double rji_sqr, rji, inv_rji; 
-			double y, f_exch,  energy = 0.0;
+			double energy;
+			double sumJ;
 			double J;
-			int j;
-			double r_sqr_cut = sld::internal::r_cut_fields*sld::internal::r_cut_fields;
-	      	double exch_inv_rcut = 1.0/sld::internal::r_cut_fields;
-       		double sumJ = 0.0;
 
+			double power_0, power_1, power_2, power_3, power_4, power_5, power_6, power_7, power_8, power_9;
+			double rji_1, rji_2, rji_3, rji_4, rji_5, rji_6, rji_7, rji_8, rji_9;
+			double J_prime, J_init;
+			
+			int j;
+			int nbr_start, nbr_end;
+			unsigned int imat;
+
+			double exch_inv_rcut = 1.0 / sld::internal::r_cut_fields;
+			double r_sqr_cut = sld::internal::r_cut_fields * sld::internal::r_cut_fields;
+
+			double exch_J0 = sld::internal::mp[imat].J0_ms.get();
+          	double exch_J0_prime = sld::internal::mp[imat].J0_prime.get();
+	      	
+
+			// =========================================================================
+			// Iterate through the atoms list for interaction calculation
+			// =========================================================================
        		for(int i = start_index; i < end_index; ++i)
 			{
 
-          		const unsigned int imat = atoms::type_array[i];
+          		imat = atoms::type_array[i];
 
+				// =========================================================================
+				// No interaction between Fe-Rh and Rh-Rh
+				// =========================================================================
 				if (imat == 1) {
 					forces_array_x[i] = 0.0;
 					forces_array_y[i] = 0.0;
@@ -153,11 +177,8 @@ namespace sld
 					continue;
 				}
 
-          		double exch_J0 = sld::internal::mp[imat].J0_ms.get();
-          		double exch_J0_prime = sld::internal::mp[imat].J0_prime.get();
-				
-				int nbr_start = neighbour_list_start_index[i];
-				int nbr_end = neighbour_list_end_index[i]+1;
+				nbr_start = neighbour_list_start_index[i];
+				nbr_end = neighbour_list_end_index[i] + 1;
 
 				fx = 0.0;
 				fy = 0.0;
@@ -178,11 +199,17 @@ namespace sld
 				sy = y_spin_array[i];
 				sz = z_spin_array[i];
 
+				// =========================================================================
+				// Iterate through the neighbour list for interaction calculation
+				// =========================================================================
           		for(int n = nbr_start; n < nbr_end; ++n)
 				{
 
             		j = neighbour_list_array[n];
 
+					// =========================================================================
+					// No interaction between Fe-Rh and Rh-Rh
+					// =========================================================================
 					if (atoms::type_array[j] == 1) continue;
 
 					if (j != i)
@@ -197,12 +224,11 @@ namespace sld
 
 						rji_sqr = (dx*dx) + (dy*dy) + (dz*dz);
 
+						// =========================================================================
+						// Cut-off the interaction after threshold distance
+						// =========================================================================
              			if(rji_sqr < r_sqr_cut)
             			{   
-							double power_0, power_1, power_2, power_3, power_4, power_5, power_6, power_7, power_8, power_9;
-							double rji_1, rji_2, rji_3, rji_4, rji_5, rji_6, rji_7, rji_8, rji_9;
-							double J_prime, J_init;
-
                  			rji = sqrt(rji_sqr);
                  			inv_rji = 1.0 / rji;
 
@@ -318,31 +344,41 @@ namespace sld
 								std::vector<double>& fields_array_y,
 								std::vector<double>& fields_array_z)
 		{
-
-
+			// =========================================================================
+			// Memory allocation, allocate one before iteration, allow rewrite
+			// =========================================================================
 			double rx, ry, rz;
 			double dx, dy, dz;
 			double sx, sy, sz;
 			double sjx, sjy,sjz;
 			double si_dot_sj;
-
-			double fc_x = 0.0, fc_y = 0.0, fc_z = 0.0;
-			double hc_x = 0.0, hc_y = 0.0, hc_z = 0.0;
-
+			double fc_x, fc_y, fc_z;
+			double hc_x, hc_y, hc_z;
 			double rji_sqr, rji, inv_rji,  inv_rji2, inv_rji4, inv_rji6;
 			double sj_dot_rji, si_dot_rji;
 			double energy_c;
-			int j; 
-
-			double r_sqr_cut = sld::internal::r_cut_fields * sld::internal::r_cut_fields;
-			double oneover3 = 1.0/3.0;
 			double sumC;
 
-			for(int i=start_index;i<end_index; ++i)
+			int j; 
+			int nbr_start, nbr_end;
+			unsigned int imat;
+
+			double r_sqr_cut = sld::internal::r_cut_fields * sld::internal::r_cut_fields;
+			double fact =sld::internal::mp[imat].C0.get() / 1.602176634e-19;
+			double fact_ms = sld::internal::mp[imat].C0_ms.get();
+			double oneover3 = 1.0 / 3.0;
+			
+			// =========================================================================
+			// Iterate through the atoms list for interaction calculation
+			// =========================================================================
+			for(int i  =start_index; i < end_index; ++i)
 			{
 
-				const unsigned int imat = atoms::type_array[i];
+				imat = atoms::type_array[i];
 
+				// =========================================================================
+				// No interaction between Fe-Rh and Rh-Rh
+				// =========================================================================
 				if (imat == 1) {
 					forces_array_x[i] = 0;
 					forces_array_y[i] = 0;
@@ -357,11 +393,8 @@ namespace sld
 					continue;
 				}
 
-				double fact =sld::internal::mp[imat].C0.get()/1.602176634e-19;
-				double fact_ms = sld::internal::mp[imat].C0_ms.get();
-
-				int nbr_start = neighbour_list_start_index[i];
-				int nbr_end = neighbour_list_end_index[i] + 1;
+				nbr_start = neighbour_list_start_index[i];
+				nbr_end = neighbour_list_end_index[i] + 1;
 
 				fc_x = 0.0;
 				fc_y = 0.0;
@@ -382,9 +415,16 @@ namespace sld
 				sy = y_spin_array[i];
 				sz = z_spin_array[i];
 
+				// =========================================================================
+				// Iterate through the neighbour list for interaction calculation
+				// =========================================================================
 				for( int n = nbr_start; n < nbr_end; ++n)
 				{
 					j = neighbour_list_array[n];
+
+					// =========================================================================
+					// No interaction between Fe-Rh and Rh-Rh
+					// =========================================================================
 					if (atoms::type_array[j] == 1) continue;
 
 					if (j != i)
@@ -398,7 +438,10 @@ namespace sld
 						dz = sld::PBC_wrap(dz, cs::system_dimensions[2], cs::pbc[2]);
 
 						rji_sqr = (dx*dx) + (dy*dy) + (dz*dz);
-
+						
+						// =========================================================================
+						// Cut-off the interaction after threshold distance
+						// =========================================================================
 						if(rji_sqr < r_sqr_cut)
 						{
                             rji = sqrt(rji_sqr);
@@ -465,29 +508,43 @@ namespace sld
 										std::vector<double>& fields_array_y,
 										std::vector<double>& fields_array_z)
 		{
+			// =========================================================================
+			// Memory allocation, allocate one before iteration, allow rewrite
+			// =========================================================================
 			double rx, ry, rz;
 			double dx, dy, dz;
 			double sx, sy, sz;
 			double sjx, sjy,sjz;
 			double si_dot_sj;
-
-			double fc_x = 0.0, fc_y = 0.0, fc_z = 0.0;
-			double hc_x = 0.0, hc_y = 0.0, hc_z = 0.0;
-
+			double fc_x, fc_y, fc_z;
+			double hc_x, hc_y, hc_z;
 			double rji_sqr, rji, inv_rji,  inv_rji2, inv_rji4, inv_rji6;
 			double sj_dot_rji, si_dot_rji;
 			double energy_c;
+			double prod1, prod2, prod3, prod4;
+			double sj3, si3;
+			double deriv1;
+
 			int j; 
+			int nbr_start, nbr_end;
+			unsigned int imat;
 
 			double r_sqr_cut = sld::internal::r_cut_fields * sld::internal::r_cut_fields;
+			double fact = sld::internal::mp[imat].C0.get() / 1.602176634e-19;
+			double fact_ms = sld::internal::mp[imat].C0_ms.get();
 			double oneover3 = 1.0 / 3.0;
+			double twelveoverthirthfive = 12.0 / 35.0;
 
-			for(int i=start_index;i<end_index; ++i)
+			// =========================================================================
+			// Iterate through the atoms list for interaction calculation
+			// =========================================================================
+			for(int i = start_index; i < end_index; ++i)
 			{
-				const unsigned int imat = atoms::type_array[i];
-				double fact = sld::internal::mp[imat].C0.get() / 1.602176634e-19;
-				double fact_ms = sld::internal::mp[imat].C0_ms.get();
-
+				imat = atoms::type_array[i];
+				
+				// =========================================================================
+				// No interaction between Fe-Rh and Rh-Rh
+				// =========================================================================
 				if (imat == 1) {
 					forces_array_x[i] = 0;
 					forces_array_y[i] = 0;
@@ -505,9 +562,11 @@ namespace sld
 				fc_x = 0.0;
 				fc_y = 0.0;
 				fc_z = 0.0;
+
 				hc_x = 0.0;
 				hc_y = 0.0;
 				hc_z = 0.0;
+
 				energy_c = 0.0;
 
 				rx = x_coord_array[i];
@@ -518,16 +577,21 @@ namespace sld
 				sy = y_spin_array[i];
 				sz = z_spin_array[i];
 
-				int nbr_start = neighbour_list_start_index[i];
-				int nbr_end = neighbour_list_end_index[i] + 1;
+				nbr_start = neighbour_list_start_index[i];
+				nbr_end = neighbour_list_end_index[i] + 1;
 
-                for( int n = nbr_start; n < nbr_end; ++n)
+				// =========================================================================
+				// Iterate through the neighbour list for interaction calculation
+				// =========================================================================
+                for(int n = nbr_start; n < nbr_end; ++n)
 				{
+					// =========================================================================
+					// No interaction between Fe-Rh and Rh-Rh
+					// =========================================================================
 					j = neighbour_list_array[n];
 
 					if (j != i)
 					{
-
 						dx = -x_coord_array[j] + rx;
 						dy = -y_coord_array[j] + ry;
 						dz = -z_coord_array[j] + rz;
@@ -538,10 +602,13 @@ namespace sld
 
 						rji_sqr = (dx * dx) + (dy * dy) + (dz * dz);
 
+						// =========================================================================
+						// Cut-off the interaction after threshold distance
+						// =========================================================================
 						if(rji_sqr < r_sqr_cut)
 						{
 							rji = sqrt(rji_sqr);
-							inv_rji = 1.0/ rji;
+							inv_rji = 1.0 / rji;
 
 							sjx = x_spin_array[j];
 							sjy = y_spin_array[j];
@@ -556,45 +623,45 @@ namespace sld
 							inv_rji4 = inv_rji2 * inv_rji2;
 							inv_rji6 = inv_rji4 * inv_rji2;
 
-							double prod1 = (inv_rji2 * si_dot_rji * si_dot_rji) - (oneover3 * si_dot_sj);
-							double prod2 = (inv_rji2 * sj_dot_rji * sj_dot_rji) - (oneover3 * si_dot_sj);
-							double prod3 = si_dot_rji * sj_dot_rji * sj_dot_rji * sj_dot_rji;
-							double prod4 = sj_dot_rji * si_dot_rji * si_dot_rji * si_dot_rji;
-							double sj3 = sj_dot_rji * sj_dot_rji * sj_dot_rji;
-							double si3 = si_dot_rji * si_dot_rji * si_dot_rji;
-							double deriv1 = 2 * inv_rji2 * si_dot_rji;
+							prod1  = (inv_rji2 * si_dot_rji * si_dot_rji) - (oneover3 * si_dot_sj);
+							prod2  = (inv_rji2 * sj_dot_rji * sj_dot_rji) - (oneover3 * si_dot_sj);
+							prod3  = si_dot_rji * sj_dot_rji * sj_dot_rji * sj_dot_rji;
+							prod4  = sj_dot_rji * si_dot_rji * si_dot_rji * si_dot_rji;
+							sj3    = sj_dot_rji * sj_dot_rji * sj_dot_rji;
+							si3    = si_dot_rji * si_dot_rji * si_dot_rji;
+							deriv1 = 2 * inv_rji2 * si_dot_rji;
 							
 							// Field calculation
-                            hc_x += ((12.0/35.0) * fact_ms * inv_rji4 * ((inv_rji2 * dx * sj_dot_rji) - (oneover3 * sjx)));
-                            hc_y += ((12.0/35.0) * fact_ms * inv_rji4 * ((inv_rji2 * dy * sj_dot_rji) - (oneover3 * sjy)));
-                            hc_z += ((12.0/35.0) * fact_ms * inv_rji4 * ((inv_rji2 * dz * sj_dot_rji) - (oneover3 * sjz)));
+                            hc_x += (twelveoverthirthfive * fact_ms * inv_rji4 * ((inv_rji2 * dx * sj_dot_rji) - (oneover3 * sjx)));
+                            hc_y += (twelveoverthirthfive * fact_ms * inv_rji4 * ((inv_rji2 * dy * sj_dot_rji) - (oneover3 * sjy)));
+                            hc_z += (twelveoverthirthfive * fact_ms * inv_rji4 * ((inv_rji2 * dz * sj_dot_rji) - (oneover3 * sjz)));
 
-                            energy_c += ((12.0/35.0) * fact_ms * inv_rji4 * ((inv_rji2 * sj_dot_rji * si_dot_rji) - (oneover3 * si_dot_sj)));
+                            energy_c += (twelveoverthirthfive * fact_ms * inv_rji4 * ((inv_rji2 * sj_dot_rji * si_dot_rji) - (oneover3 * si_dot_sj)));
 
-                            hc_x += ((9.0/5.0) * fact_ms * inv_rji4 * ((((deriv1 * dx) - (oneover3 * sjx)) * prod2) + (prod1 * (-oneover3 * sjx))));
-                            hc_y += ((9.0/5.0) * fact_ms * inv_rji4 * ((((deriv1 * dy) - (oneover3 * sjy)) * prod2) + (prod1 * (-oneover3 * sjy))));
-                            hc_z += ((9.0/5.0) * fact_ms * inv_rji4 * ((((deriv1 * dz) - (oneover3 * sjz)) * prod2) + (prod1 * (-oneover3 * sjz))));
+                            hc_x += (1.8 * fact_ms * inv_rji4 * ((((deriv1 * dx) - (oneover3 * sjx)) * prod2) + (prod1 * (-oneover3 * sjx))));
+                            hc_y += (1.8 * fact_ms * inv_rji4 * ((((deriv1 * dy) - (oneover3 * sjy)) * prod2) + (prod1 * (-oneover3 * sjy))));
+                            hc_z += (1.8 * fact_ms * inv_rji4 * ((((deriv1 * dz) - (oneover3 * sjz)) * prod2) + (prod1 * (-oneover3 * sjz))));
 
-                            energy_c += ((9.0/5.0) * fact_ms * inv_rji4 * prod1 * prod2);
+                            energy_c += (1.8 * fact_ms * inv_rji4 * prod1 * prod2);
 
-							hc_x += ((-2.0/5.0) * fact_ms * inv_rji4 * inv_rji4 * ((dx * sj3) + (3.0 * dx * sj_dot_rji * si_dot_rji * si_dot_rji)));
-                            hc_y += ((-2.0/5.0) * fact_ms * inv_rji4 * inv_rji4 * ((dy * sj3) + (3.0 * dy * sj_dot_rji * si_dot_rji * si_dot_rji)));
-                            hc_z += ((-2.0/5.0) * fact_ms * inv_rji4 * inv_rji4 * ((dz * sj3) + (3.0 * dz * sj_dot_rji * si_dot_rji * si_dot_rji)));
+							hc_x += (-0.4 * fact_ms * inv_rji4 * inv_rji4 * ((dx * sj3) + (3.0 * dx * sj_dot_rji * si_dot_rji * si_dot_rji)));
+                            hc_y += (-0.4 * fact_ms * inv_rji4 * inv_rji4 * ((dy * sj3) + (3.0 * dy * sj_dot_rji * si_dot_rji * si_dot_rji)));
+                            hc_z += (-0.4 * fact_ms * inv_rji4 * inv_rji4 * ((dz * sj3) + (3.0 * dz * sj_dot_rji * si_dot_rji * si_dot_rji)));
 
-                            energy_c += ((-2.0/5.0) * fact_ms * inv_rji4 * inv_rji4 * (prod3 + prod4));
+                            energy_c += (-0.4 * fact_ms * inv_rji4 * inv_rji4 * (prod3 + prod4));
 							
 							// Force calculation
-                            fc_x += ((12.0/35.0) * fact * inv_rji6 * ((sj_dot_rji * sx + si_dot_rji * sjx) - (6.0 * dx * sj_dot_rji * si_dot_rji * inv_rji2) + (oneover3 * 4.0 * si_dot_sj * dx)));
-                            fc_y += ((12.0/35.0) * fact * inv_rji6 * ((sj_dot_rji * sy + si_dot_rji * sjy) - (6.0 * dy * sj_dot_rji * si_dot_rji * inv_rji2) + (oneover3 * 4.0 * si_dot_sj * dy)));
-                            fc_z += ((12.0/35.0) * fact * inv_rji6 * ((sj_dot_rji * sz + si_dot_rji * sjz) - (6.0 * dz * sj_dot_rji * si_dot_rji * inv_rji2) + (oneover3 * 4.0 * si_dot_sj * dz)));
+                            fc_x += (twelveoverthirthfive * fact * inv_rji6 * ((sj_dot_rji * sx + si_dot_rji * sjx) - (6.0 * dx * sj_dot_rji * si_dot_rji * inv_rji2) + (oneover3 * 4.0 * si_dot_sj * dx)));
+                            fc_y += (twelveoverthirthfive * fact * inv_rji6 * ((sj_dot_rji * sy + si_dot_rji * sjy) - (6.0 * dy * sj_dot_rji * si_dot_rji * inv_rji2) + (oneover3 * 4.0 * si_dot_sj * dy)));
+                            fc_z += (twelveoverthirthfive * fact * inv_rji6 * ((sj_dot_rji * sz + si_dot_rji * sjz) - (6.0 * dz * sj_dot_rji * si_dot_rji * inv_rji2) + (oneover3 * 4.0 * si_dot_sj * dz)));
 
-                            fc_x += (9.0/5.0) * fact * ((-4 * dx * inv_rji6 * prod1 * prod2) + inv_rji4 * prod2 * ((2 * sx * inv_rji2 * si_dot_rji) - (2 * dx * si_dot_rji * si_dot_rji * inv_rji4)) + inv_rji4 * prod1 * (2 * sjx * inv_rji2 * sj_dot_rji - 2 * dx * sj_dot_rji * sj_dot_rji * inv_rji4));
-                            fc_y += (9.0/5.0) * fact * ((-4 * dy * inv_rji6 * prod1 * prod2) + inv_rji4 * prod2 * ((2 * sy * inv_rji2 * si_dot_rji) - (2 * dy * si_dot_rji * si_dot_rji * inv_rji4)) + inv_rji4 * prod1 * (2 * sjy * inv_rji2 * sj_dot_rji - 2 * dy * sj_dot_rji * sj_dot_rji * inv_rji4));
-                            fc_z += (9.0/5.0) * fact * ((-4 * dz * inv_rji6 * prod1 * prod2) + inv_rji4 * prod2 * ((2 * sz * inv_rji2 * si_dot_rji) - (2 * dz * si_dot_rji * si_dot_rji * inv_rji4)) + inv_rji4 * prod1 * (2 * sjz * inv_rji2 * sj_dot_rji - 2 * dz * sj_dot_rji * sj_dot_rji * inv_rji4));
+                            fc_x += 1.8 * fact * ((-4.0 * dx * inv_rji6 * prod1 * prod2) + inv_rji4 * prod2 * ((2.0 * sx * inv_rji2 * si_dot_rji) - (2.0 * dx * si_dot_rji * si_dot_rji * inv_rji4)) + inv_rji4 * prod1 * (2.0 * sjx * inv_rji2 * sj_dot_rji - 2.0 * dx * sj_dot_rji * sj_dot_rji * inv_rji4));
+                            fc_y += 1.8 * fact * ((-4.0 * dy * inv_rji6 * prod1 * prod2) + inv_rji4 * prod2 * ((2.0 * sy * inv_rji2 * si_dot_rji) - (2.0 * dy * si_dot_rji * si_dot_rji * inv_rji4)) + inv_rji4 * prod1 * (2.0 * sjy * inv_rji2 * sj_dot_rji - 2.0 * dy * sj_dot_rji * sj_dot_rji * inv_rji4));
+                            fc_z += 1.8 * fact * ((-4.0 * dz * inv_rji6 * prod1 * prod2) + inv_rji4 * prod2 * ((2.0 * sz * inv_rji2 * si_dot_rji) - (2.0 * dz * si_dot_rji * si_dot_rji * inv_rji4)) + inv_rji4 * prod1 * (2.0 * sjz * inv_rji2 * sj_dot_rji - 2.0 * dz * sj_dot_rji * sj_dot_rji * inv_rji4));
 
-                            fc_x += (-2.0/5.0) * fact * ((-4 * dx * inv_rji6) * (inv_rji4 * prod3 + inv_rji4 * prod4) + inv_rji4 * (-4 * dx * inv_rji6 * prod3 + inv_rji4 * sx * sj3 + inv_rji4 * si_dot_rji * 3 * sjx * sj_dot_rji * sj_dot_rji) + inv_rji4 * (-4 * dx * inv_rji6 * prod4 + inv_rji4 * sjx * si3 + inv_rji4 * sj_dot_rji * 3 * sx * si_dot_rji * si_dot_rji));
-                            fc_y += (-2.0/5.0) * fact * ((-4 * dy * inv_rji6) * (inv_rji4 * prod3 + inv_rji4 * prod4) + inv_rji4 * (-4 * dy * inv_rji6 * prod3 + inv_rji4 * sy * sj3 + inv_rji4 * si_dot_rji * 3 * sjy * sj_dot_rji * sj_dot_rji) + inv_rji4 * (-4 * dy * inv_rji6 * prod4 + inv_rji4 * sjy * si3 + inv_rji4 * sj_dot_rji * 3 * sy * si_dot_rji * si_dot_rji));
-                            fc_z += (-2.0/5.0) * fact * ((-4 * dz * inv_rji6) * (inv_rji4 * prod3 + inv_rji4 * prod4) + inv_rji4 * (-4 * dz * inv_rji6 * prod3 + inv_rji4 * sz * sj3 + inv_rji4 * si_dot_rji * 3 * sjz * sj_dot_rji * sj_dot_rji) + inv_rji4 * (-4 * dz * inv_rji6 * prod4 + inv_rji4 * sjz * si3 + inv_rji4 * sj_dot_rji * 3 * sz * si_dot_rji * si_dot_rji));
+                            fc_x += -0.4 * fact * ((-4.0 * dx * inv_rji6) * (inv_rji4 * prod3 + inv_rji4 * prod4) + inv_rji4 * (-4.0 * dx * inv_rji6 * prod3 + inv_rji4 * sx * sj3 + inv_rji4 * si_dot_rji * 3.0 * sjx * sj_dot_rji * sj_dot_rji) + inv_rji4 * (-4.0 * dx * inv_rji6 * prod4 + inv_rji4 * sjx * si3 + inv_rji4 * sj_dot_rji * 3.0 * sx * si_dot_rji * si_dot_rji));
+                            fc_y += -0.4 * fact * ((-4.0 * dy * inv_rji6) * (inv_rji4 * prod3 + inv_rji4 * prod4) + inv_rji4 * (-4.0 * dy * inv_rji6 * prod3 + inv_rji4 * sy * sj3 + inv_rji4 * si_dot_rji * 3.0 * sjy * sj_dot_rji * sj_dot_rji) + inv_rji4 * (-4.0 * dy * inv_rji6 * prod4 + inv_rji4 * sjy * si3 + inv_rji4 * sj_dot_rji * 3.0 * sy * si_dot_rji * si_dot_rji));
+                            fc_z += -0.4 * fact * ((-4.0 * dz * inv_rji6) * (inv_rji4 * prod3 + inv_rji4 * prod4) + inv_rji4 * (-4.0 * dz * inv_rji6 * prod3 + inv_rji4 * sz * sj3 + inv_rji4 * si_dot_rji * 3.0 * sjz * sj_dot_rji * sj_dot_rji) + inv_rji4 * (-4.0 * dz * inv_rji6 * prod4 + inv_rji4 * sjz * si3 + inv_rji4 * sj_dot_rji * 3.0 * sz * si_dot_rji * si_dot_rji));
 						}
                		}
             	}
