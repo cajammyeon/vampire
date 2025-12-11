@@ -42,14 +42,15 @@ namespace exchange
 			// Memory allocation, allocate once before iteration, allow for overwrite
 			// =========================================================================
 			const int num_four_spin_neighbours = four_spin_neighbour_list_array_l.size();
-			double athird = 1.0/3.0;
-
 			int atom, natomj, natomk, natoml;
+
 			double Jij;
 			double sjx, sjy, sjz;
 			double skx, sky, skz;
 			double slx, sly, slz;
 			double sk_dot_sl, sj_dot_sk, sj_dot_sl;
+
+			double athird = 1.0 / 3.0;
 
 			// =========================================================================
 			// Iterate through the neighbour list for interaction calculation

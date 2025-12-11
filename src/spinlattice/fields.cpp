@@ -364,7 +364,7 @@ namespace sld
 			unsigned int imat;
 
 			double r_sqr_cut = sld::internal::r_cut_fields * sld::internal::r_cut_fields;
-			double fact =sld::internal::mp[imat].C0.get() / 1.602176634e-19;
+			double fact = sld::internal::mp[imat].C0.get() / 1.602176634e-19;
 			double fact_ms = sld::internal::mp[imat].C0_ms.get();
 			double oneover3 = 1.0 / 3.0;
 			

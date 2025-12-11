@@ -19,7 +19,7 @@ material[1]:damping-constant-lattice = 0.6
 material[1]:exchange-J0 = 1 !eV
 material[1]:harmonic-potential-V0 = 0.15 !eV
 material[1]:coupling-C0 = 0.5
-material[1]:four-spin-constant[1] = -0.23e-21
+# material[1]:four-spin-constant[1] = -0.23e-21
 
 #------------------------------------------------
 # Material 2 (Rh)
@@ -36,4 +36,4 @@ material[2]:damping-constant-lattice = 0.6
 material[2]:exchange-J0 = 0 !eV
 material[2]:harmonic-potential-V0 = 0.15 !eV
 material[2]:coupling-C0 = 0.5
-material[2]:four-spin-constant[2] = 0
+# material[2]:four-spin-constant[2] = 0
