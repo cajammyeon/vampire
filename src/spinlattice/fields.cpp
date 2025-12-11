@@ -63,7 +63,7 @@ namespace sld
 		if (exchange::four_spin) exchange::internal::four_spin_exchange_fields(start_index, end_index, 
 																			fields_array_x, fields_array_y, fields_array_z);
 
-		if(sld::internal::pseudodipolar) internal::compute_sld_coupling(start_index, end_index,
+		if (sld::internal::pseudodipolar) internal::compute_sld_coupling(start_index, end_index,
 																		neighbour_list_start_index, neighbour_list_end_index,
 																		type_array, neighbour_list_array,
 																		x_coord_array, y_coord_array, z_coord_array,
@@ -71,7 +71,7 @@ namespace sld
 																		forces_array_x, forces_array_y, forces_array_z,
 																		fields_array_x, fields_array_y, fields_array_z);
 
-		if(sld::internal::full_neel) internal::compute_sld_coupling_neel(start_index, end_index,
+		if (sld::internal::full_neel) internal::compute_sld_coupling_neel(start_index, end_index,
 																		neighbour_list_start_index, neighbour_list_end_index,
 																		type_array, neighbour_list_array,
 																		x_coord_array, y_coord_array, z_coord_array,
