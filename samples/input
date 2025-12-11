@@ -35,11 +35,10 @@ sim:minimum-temperature = 0
 sim:applied-field-strength = 0!T
 
 sim:equilibration-temperature = 800
-sim:equilibration-time-steps = 10000
+sim:equilibration-time-steps = 100
 
 sim:total-time-steps = 100000
-
-sim:time-step = 0.1 !fs
+sim:time-step = 1 !fs
 
 #------------------------------------------
 # SLD config
