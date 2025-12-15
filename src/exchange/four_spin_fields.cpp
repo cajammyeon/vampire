@@ -62,6 +62,8 @@ namespace exchange
 				natomk = four_spin_neighbour_list_array_k[nn];
 				natoml = four_spin_neighbour_list_array_l[nn];
 
+				if (atoms::type_array[atom] == 1) continue;
+
 				Jij = four_spin_exchange_list[nn];
 
 				sjx = atoms::x_spin_array[natomj];
