@@ -300,11 +300,6 @@ namespace sld
 							power_8 = (1.291292480059483e-23)   * rji_7 * 8;
 							power_9 = (-2.3323729478397598e-25) * rji_8 * 9;
 							J_prime = (power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9);
-<<<<<<< Updated upstream
-=======
-
-							// std::cout << "Exchange : " << J << "    Exchange force : " << J_prime;
->>>>>>> Stashed changes
 							
 							// Normalised force on components
 							fx += (J_prime * si_dot_sj * dx * inv_rji);
