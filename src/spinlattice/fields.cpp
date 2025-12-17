@@ -136,6 +136,7 @@ namespace sld
 			double energy;
 			double sumJ;
 			double J;
+			double exch_J0, exch_J0_prime;
 
 			double power_0, power_1, power_2, power_3, power_4, power_5, power_6, power_7, power_8, power_9;
 			double rji_1, rji_2, rji_3, rji_4, rji_5, rji_6, rji_7, rji_8, rji_9;
@@ -148,16 +149,11 @@ namespace sld
 			double exch_inv_rcut = 1.0 / sld::internal::r_cut_fields;
 			double r_sqr_cut = sld::internal::r_cut_fields * sld::internal::r_cut_fields;
 
-			double exch_J0 = sld::internal::mp[imat].J0_ms.get();
-          	double exch_J0_prime = sld::internal::mp[imat].J0_prime.get();
-	      	
-
 			// =========================================================================
 			// Iterate through the atoms list for interaction calculation
 			// =========================================================================
        		for(int i = start_index; i < end_index; ++i)
 			{
-
           		imat = atoms::type_array[i];
 
 				// =========================================================================
@@ -176,6 +172,9 @@ namespace sld
 					sld::internal::exch_eng[i] = 0.0;
 					continue;
 				}
+
+				exch_J0 = sld::internal::mp[imat].J0_ms.get();
+          		exch_J0_prime = sld::internal::mp[imat].J0_prime.get();
 
 				nbr_start = neighbour_list_start_index[i];
 				nbr_end = neighbour_list_end_index[i] + 1;
@@ -358,14 +357,13 @@ namespace sld
 			double sj_dot_rji, si_dot_rji;
 			double energy_c;
 			double sumC;
+			double fact, fact_ms;
 
 			int j; 
 			int nbr_start, nbr_end;
 			unsigned int imat;
 
 			double r_sqr_cut = sld::internal::r_cut_fields * sld::internal::r_cut_fields;
-			double fact = sld::internal::mp[imat].C0.get() / 1.602176634e-19;
-			double fact_ms = sld::internal::mp[imat].C0_ms.get();
 			double oneover3 = 1.0 / 3.0;
 			
 			// =========================================================================
@@ -373,7 +371,6 @@ namespace sld
 			// =========================================================================
 			for(int i  =start_index; i < end_index; ++i)
 			{
-
 				imat = atoms::type_array[i];
 
 				// =========================================================================
@@ -392,6 +389,9 @@ namespace sld
 					sld::internal::coupl_eng[i] = 0;
 					continue;
 				}
+
+				fact = sld::internal::mp[imat].C0.get() / 1.602176634e-19;
+				fact_ms = sld::internal::mp[imat].C0_ms.get();
 
 				nbr_start = neighbour_list_start_index[i];
 				nbr_end = neighbour_list_end_index[i] + 1;
@@ -524,14 +524,14 @@ namespace sld
 			double prod1, prod2, prod3, prod4;
 			double sj3, si3;
 			double deriv1;
+			double fact, fact_ms;
 
 			int j; 
 			int nbr_start, nbr_end;
 			unsigned int imat;
 
 			double r_sqr_cut = sld::internal::r_cut_fields * sld::internal::r_cut_fields;
-			double fact = sld::internal::mp[imat].C0.get() / 1.602176634e-19;
-			double fact_ms = sld::internal::mp[imat].C0_ms.get();
+			
 			double oneover3 = 1.0 / 3.0;
 			double twelveoverthirthfive = 12.0 / 35.0;
 
@@ -558,6 +558,12 @@ namespace sld
 					sld::internal::coupl_eng[i] = 0;
 					continue;
 				}
+
+				fact = sld::internal::mp[imat].C0.get() / 1.602176634e-19;
+				fact_ms = sld::internal::mp[imat].C0_ms.get();
+
+				fact = sld::internal::mp[imat].C0.get() / 1.602176634e-19;
+				fact_ms = sld::internal::mp[imat].C0_ms.get();
 
 				fc_x = 0.0;
 				fc_y = 0.0;
