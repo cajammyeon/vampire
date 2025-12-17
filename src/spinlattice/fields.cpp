@@ -562,9 +562,6 @@ namespace sld
 				fact = sld::internal::mp[imat].C0.get() / 1.602176634e-19;
 				fact_ms = sld::internal::mp[imat].C0_ms.get();
 
-				fact = sld::internal::mp[imat].C0.get() / 1.602176634e-19;
-				fact_ms = sld::internal::mp[imat].C0_ms.get();
-
 				fc_x = 0.0;
 				fc_y = 0.0;
 				fc_z = 0.0;
