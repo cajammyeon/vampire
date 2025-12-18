@@ -26,7 +26,10 @@ sim:integrator = spin-lattice
 #------------------------------------------
 # Simulation attributes
 #------------------------------------------
-sim:temperature = 800
+sim:cooling-function = linear
+sim:cooling-time = 0.1 !ns
+
+sim:temperature = 700
 
 sim:total-time-steps = 100000
 sim:time-steps-increment = 100
@@ -35,7 +38,7 @@ sim:time-step = 1 !fs
 #------------------------------------------
 # SLD config
 #------------------------------------------
-spin-lattice:potential-cutoff-range = 4.0 !A
+spin-lattice:potential-cutoff-range = 8.15 !A
 spin-lattice:fields-cutoff-range = 10.0 !A
 spin-lattice:coupling = pseudodipolar
 spin-lattice:potential = harmonic
@@ -47,13 +50,9 @@ exchange:interaction-range = 3
 #------------------------------------------
 config:atoms
 config:atoms-output-rate = 10
-config:sld
 
 output:real-time
 output:temperature
 output:magnetisation
-output:mean-magnetisation-length
-output:total-energy
-
 output:lattice-temperature
 output:spin-temperature

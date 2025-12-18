@@ -29,9 +29,7 @@ sim:integrator = spin-lattice
 sim:cooling-function = linear
 sim:cooling-time = 0.1 !ns
 
-sim:temperature = 700
-sim:equilibration-temperature = 800
-sim:equilibration-time-steps = 100
+sim:temperature = 100
 
 sim:total-time-steps = 100000
 sim:time-steps-increment = 100
@@ -55,5 +53,6 @@ config:atoms-output-rate = 10
 
 output:real-time
 output:temperature
+output:magnetisation
 output:lattice-temperature
 output:spin-temperature

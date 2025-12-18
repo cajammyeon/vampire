@@ -20,7 +20,7 @@ material:file = FeRh.mat
 #------------------------------------------
 # Program and integrator details
 #------------------------------------------
-sim:program = field-cool
+sim:program = time-series
 sim:integrator = spin-lattice
 
 #------------------------------------------
@@ -29,13 +29,7 @@ sim:integrator = spin-lattice
 sim:cooling-function = linear
 sim:cooling-time = 0.1 !ns
 
-sim:maximum-temperature = 800
-sim:minimum-temperature = 0
-
-sim:applied-field-strength = 0!T
-
-sim:equilibration-temperature = 800
-sim:equilibration-time-steps = 100
+sim:temperature = 200
 
 sim:total-time-steps = 100000
 sim:time-steps-increment = 100
@@ -44,26 +38,21 @@ sim:time-step = 1 !fs
 #------------------------------------------
 # SLD config
 #------------------------------------------
-spin-lattice:potential-cutoff-range = 4.0 !A
+spin-lattice:potential-cutoff-range = 8.15 !A
 spin-lattice:fields-cutoff-range = 10.0 !A
 spin-lattice:coupling = pseudodipolar
 spin-lattice:potential = harmonic
 
 exchange:interaction-range = 3
-exchange:four-spin-cutoff-1 = 1
-exchange:four-spin-cutoff-2 = 1.414
 
 #------------------------------------------
 # Data output
 #------------------------------------------
 config:atoms
 config:atoms-output-rate = 10
-config:sld
 
 output:real-time
 output:temperature
 output:magnetisation
-
-output:total-energy
 output:lattice-temperature
 output:spin-temperature
