@@ -159,7 +159,7 @@ namespace sld
 				// =========================================================================
 				// No interaction between Fe-Rh and Rh-Rh
 				// =========================================================================
-				if (imat == 1) {
+				if (imat == 2) {
 					forces_array_x[i] = 0.0;
 					forces_array_y[i] = 0.0;
 					forces_array_z[i] = 0.0;
@@ -209,7 +209,7 @@ namespace sld
 					// =========================================================================
 					// No interaction between Fe-Rh and Rh-Rh
 					// =========================================================================
-					if (atoms::type_array[j] == 1) continue;
+					if (atoms::type_array[j] == 2) continue;
 
 					if (j != i)
 					{
@@ -376,7 +376,7 @@ namespace sld
 				// =========================================================================
 				// No interaction between Fe-Rh and Rh-Rh
 				// =========================================================================
-				if (imat == 1) {
+				if (imat == 2) {
 					forces_array_x[i] = 0;
 					forces_array_y[i] = 0;
 					forces_array_z[i] = 0;
@@ -425,7 +425,7 @@ namespace sld
 					// =========================================================================
 					// No interaction between Fe-Rh and Rh-Rh
 					// =========================================================================
-					if (atoms::type_array[j] == 1) continue;
+					if (atoms::type_array[j] == 2) continue;
 
 					if (j != i)
 					{
@@ -545,7 +545,7 @@ namespace sld
 				// =========================================================================
 				// No interaction between Fe-Rh and Rh-Rh
 				// =========================================================================
-				if (imat == 1) {
+				if (imat == 2) {
 					forces_array_x[i] = 0;
 					forces_array_y[i] = 0;
 					forces_array_z[i] = 0;

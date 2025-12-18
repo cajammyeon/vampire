@@ -164,7 +164,7 @@ namespace stats
 		{
 			const int mask_id = mask[atom]; // get mask id
 			
-			if (atoms::type_array[atom] == 1) 
+			if (atoms::type_array[atom] == 2) 
 			{
 				spin_temp[mask_id] = 0;
 				continue;
