@@ -16,6 +16,7 @@ create:periodic-boundaries-y = true
 create:periodic-boundaries-z = true
 
 material:file = FeRh.mat
+material:unit-cell-file = FeRh.ucf
 
 #------------------------------------------
 # Program and integrator details
