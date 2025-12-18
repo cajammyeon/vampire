@@ -2,9 +2,9 @@
 # Creation attributes
 #------------------------------------------
 dimensions:unit-cell-size = 3 !A
-dimensions:system-size-x = 4 !nm
-dimensions:system-size-y = 4 !nm
-dimensions:system-size-z = 2 !nm
+dimensions:system-size-x = 6 !nm
+dimensions:system-size-y = 6 !nm
+dimensions:system-size-z = 4 !nm
 
 #------------------------------------------
 # Material files

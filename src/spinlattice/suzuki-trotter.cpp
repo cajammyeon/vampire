@@ -455,7 +455,7 @@ namespace sld
 		{
 			for( int i = start_index; i<end_index; i++)
 			{
-				if (atoms::type_array[i] == 1) continue;
+				if (atoms::type_array[i] == 2) continue;
 
 				double Sx = x_spin_array[i];
 				double Sy = y_spin_array[i];
@@ -497,7 +497,7 @@ namespace sld
 		{
 			for (int i = start_index; i<end_index; i++)
 			{
-				if (atoms::type_array[i]) continue;
+				if (atoms::type_array[i] == 2) continue;
 					
 				const unsigned int imat = atoms::type_array[i];
 				double lambda=mp::material[imat].alpha;
