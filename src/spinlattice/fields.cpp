@@ -200,6 +200,8 @@ namespace sld
 				sy = y_spin_array[i];
 				sz = z_spin_array[i];
 
+				std::cout << nbr_end - nbr_start << std::endl;
+
 				// =========================================================================
 				// Iterate through the neighbour list for interaction calculation
 				// =========================================================================
@@ -273,8 +275,8 @@ namespace sld
 							power_8 = (1.291292480059483e-23)   * rji_8;
 							power_9 = (-2.3323729478397598e-25) * rji_9;
 							J       = power_0 + power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
-							J       = J * exch_J0;
-
+							J       = (J * exch_J0);
+							
 							// Neighbour spin
 							sjx = x_spin_array[j];
 							sjy = y_spin_array[j];
@@ -284,6 +286,7 @@ namespace sld
 							hx += (J * sjx);
 							hy += (J * sjy);
 							hz += (J * sjz);
+
 							sumJ += J;
 
 							// (S_i . S_j)
