@@ -15,8 +15,10 @@ create:periodic-boundaries-x = true
 create:periodic-boundaries-y = true
 create:periodic-boundaries-z = true
 
-material:file = FeRh.mat
-material:unit-cell-file = FeRh.ucf
+material:file = FeRh_3.mat
+material:unit-cell-file = FeRh_3.ucf
+# material:file = FeRh.mat
+# material:unit-cell-file = FeRh.ucf
 # material:file = FeRh_2.mat
 
 #------------------------------------------

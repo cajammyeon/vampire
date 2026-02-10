@@ -200,7 +200,7 @@ namespace sld
 				sy = y_spin_array[i];
 				sz = z_spin_array[i];
 
-				std::cout << nbr_end - nbr_start << std::endl;
+				// std::cout << "Atom type : " << imat << " Number of neighbours : " << nbr_end - nbr_start << std::endl;
 
 				// =========================================================================
 				// Iterate through the neighbour list for interaction calculation
