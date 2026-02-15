@@ -15,8 +15,8 @@ create:periodic-boundaries-x = true
 create:periodic-boundaries-y = true
 create:periodic-boundaries-z = true
 
-material:file = FeRh_3.mat
-material:unit-cell-file = FeRh_3.ucf
+material:file = FeRh_4.mat
+material:unit-cell-file = FeRh_4.ucf
 # material:file = FeRh.mat
 # material:unit-cell-file = FeRh.ucf
 # material:file = FeRh_2.mat
@@ -31,7 +31,7 @@ sim:integrator = spin-lattice
 # Simulation attributes
 #------------------------------------------
 sim:cooling-function = linear
-sim:cooling-time = 0.1 !ns
+sim:cooling-time = 10 !ns
 
 sim:maximum-temperature = 800
 sim:minimum-temperature = 0
@@ -41,7 +41,7 @@ sim:applied-field-strength = 0!T
 sim:equilibration-temperature = 800
 sim:equilibration-time-steps = 100
 
-sim:total-time-steps = 100000
+sim:total-time-steps = 10000000
 sim:time-steps-increment = 100
 sim:time-step = 1 !fs
 
