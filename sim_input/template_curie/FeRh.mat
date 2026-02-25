@@ -1,7 +1,7 @@
 # =======================================
 # Header file
 # =======================================
-material:num-materials = 3
+material:num-materials = 2
 
 # =======================================
 # Material 1: Fe Sublattice A (Spin Up)
@@ -44,16 +44,16 @@ material[2]:coupling-C0 = 0.5
 # =======================================
 # Material 3: Rh Sublattice 
 # =======================================
-material[3]:material-name = Rh
-material[3]:material-element = Rh
-material[3]:unit-cell-category = 3
+#material[3]:material-name = Rh
+#material[3]:material-element = Rh
+#material[3]:unit-cell-category = 3
 
-material[3]:damping-constant = 1
-material[3]:non-magnetic = keep
-material[3]:mass = 5.7915e-3
-material[3]:initial-spin-direction = 0,0,1
-material[3]:damping-constant-lattice = 0.6
-material[3]:exchange-J0 = 0 !eV
-material[3]:harmonic-potential-V0 = 0.15 !eV
-material[3]:coupling-C0 = 0.5
+#material[3]:damping-constant = 1
+#material[3]:non-magnetic = keep
+#material[3]:mass = 5.7915e-3
+#material[3]:initial-spin-direction = 0,0,1
+#material[3]:damping-constant-lattice = 0.6
+#material[3]:exchange-J0 = 0 !eV
+#material[3]:harmonic-potential-V0 = 0.15 !eV
+#material[3]:coupling-C0 = 0.5
 # material[2]:four-spin-constant[2] = 0
