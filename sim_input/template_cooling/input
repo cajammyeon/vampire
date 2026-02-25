@@ -36,7 +36,7 @@ sim:minimum-temperature = 0
 sim:applied-field-strength = 0!T
 
 sim:equilibration-temperature = 800
-sim:equilibration-time-steps = 10
+sim:equilibration-time-steps = 0
 
 sim:total-time-steps = 1000000
 sim:time-steps-increment = 100
