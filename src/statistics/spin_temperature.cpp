@@ -158,7 +158,9 @@ namespace stats
 							atoms::x_total_spin_field_array,
 							atoms::y_total_spin_field_array,
 							atoms::z_total_spin_field_array);
-
+		
+		// Issue caused here :
+		// Loop here crossed the boundary
 		const int num_masked_atoms = mask.size();
         for(int atom =  0; atom < num_masked_atoms; ++atom)
         {
