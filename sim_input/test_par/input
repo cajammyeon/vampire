@@ -1,0 +1,79 @@
+#------------------------------------------
+# Creation attributes
+#------------------------------------------
+dimensions:unit-cell-size = 3 !A
+dimensions:system-size-x = 6 !nm
+dimensions:system-size-y = 6 !nm
+dimensions:system-size-z = 4 !nm
+
+#------------------------------------------
+# Material files
+#------------------------------------------
+create:crystal-structure = bcc
+create:crystal-sublattice-materials = true
+create:periodic-boundaries-x = true
+create:periodic-boundaries-y = true
+create:periodic-boundaries-z = true
+
+material:file = FeRh.mat
+material:unit-cell-file = FeRh.ucf
+
+#------------------------------------------
+# Program and integrator details
+#------------------------------------------
+sim:program = benchmark
+sim:integrator = spin-lattice
+
+#------------------------------------------
+# Simulation attributes
+#------------------------------------------
+sim:cooling-function = linear
+sim:cooling-time = 0.1 !ns
+
+sim:maximum-temperature = 800
+sim:minimum-temperature = 0
+
+sim:applied-field-strength = 0!T
+
+sim:equilibration-temperature = 800
+sim:equilibration-time-steps = 0
+
+sim:total-time-steps = 500000
+sim:time-steps-increment = 100
+sim:time-step = 0.8 !fs
+
+#------------------------------------------
+# SLD config
+#------------------------------------------
+spin-lattice:potential-cutoff-range = 8.15 !A
+spin-lattice:fields-cutoff-range = 10 !A
+spin-lattice:coupling = pseudodipolar
+spin-lattice:potential = harmonic
+
+exchange:interaction-range = 3
+
+#------------------------------------------
+# Data output
+#------------------------------------------
+config:atoms
+config:atoms-output-rate = 10
+config:sld
+
+output:real-time
+
+output:temperature
+output:lattice-temperature
+output:spin-temperature
+
+output:magnetisation
+output:material-magnetisation
+output:mean-magnetisation-length
+
+output:total-energy
+output:mean-specific-heat
+
+output:kinetic-energy
+output:potential-energy
+output:sld-exchange-energy
+output:sld-coupling-energy
+output:sld-total-energy
