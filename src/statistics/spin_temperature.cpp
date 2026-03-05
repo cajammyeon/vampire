@@ -159,32 +159,30 @@ namespace stats
 							atoms::y_total_spin_field_array,
 							atoms::z_total_spin_field_array);
 
-		// calculate contributions of spins to each magetization category
-		for(int atom =  0; atom < num_atoms; ++atom)
-		{
-			const int mask_id = mask[atom]; // get mask id
-			
-			if (atoms::type_array[atom] == 2) 
-			{
-				spin_temp[mask_id] = 0;
-				continue;
-			};
-			
-			// get atomic moment
-			const double mu = mm[atom];
+		const int num_masked_atoms = mask.size();
+        for(int atom =  0; atom < num_masked_atoms; ++atom)
+        {
+            // FIX 2: Skip ghost/boundary atoms immediately so we don't double-count them
+            if (atoms::type_array[atom] == 2) continue;
 
-			// Store local spin in Sand local field in H
-			const double S[3] = {sx[atom],  sy[atom],  sz[atom] };
-			const double B[3] = {bxs[atom], bys[atom], bzs[atom]};
-			
-			double SxHx = S[1]*B[2]-S[2]*B[1];
-			double SxHy = S[2]*B[0]-S[0]*B[2];
-			double SxHz = S[0]*B[1]-S[1]*B[0];
-			SxH2[mask_id] += mu*(SxHx*SxHx + SxHy*SxHy + SxHz*SxHz);
-			SH[mask_id]   += S[0]*B[0] + S[1]*B[1] + S[2]*B[2];
+            // Now it is completely safe to access the mask
+            const int mask_id = mask[atom]; 
+                        
+            // get atomic moment
+            const double mu = mm[atom];
 
-			spin_temp[mask_id] = SxH2[mask_id] / SH[mask_id];
-		}
+            // Store local spin in Sand local field in H
+            const double S[3] = {sx[atom],  sy[atom],  sz[atom] };
+            const double B[3] = {bxs[atom], bys[atom], bzs[atom]};
+            
+            double SxHx = S[1]*B[2]-S[2]*B[1];
+            double SxHy = S[2]*B[0]-S[0]*B[2];
+            double SxHz = S[0]*B[1]-S[1]*B[0];
+            SxH2[mask_id] += mu*(SxHx*SxHx + SxHy*SxHy + SxHz*SxHz);
+            SH[mask_id]   += S[0]*B[0] + S[1]*B[1] + S[2]*B[2];
+
+            spin_temp[mask_id] = SxH2[mask_id] / SH[mask_id];
+        }
 
 		// Reduce on all CPUS
 		#ifdef MPICF
