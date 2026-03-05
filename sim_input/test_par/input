@@ -21,7 +21,7 @@ material:unit-cell-file = FeRh.ucf
 #------------------------------------------
 # Program and integrator details
 #------------------------------------------
-sim:program = benchmark
+sim:program = field-cool
 sim:integrator = spin-lattice
 
 #------------------------------------------
