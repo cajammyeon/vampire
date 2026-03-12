@@ -88,7 +88,7 @@ namespace sld
 				{
 					mass.set(5.7915e-3);
 					V0.set(0.15);
-					J0.set(0.904);
+					J0.set(1);
 					J0_prime.set(1/1.602176634e-19);
 					J0_ms.set(1/2.04028e-23);
 					C0.set(1/1.602176634e-19);
