@@ -238,50 +238,100 @@ namespace sld
 							// (-2.9896826732643693e-19) * (x ** 3) + (1.357513552544028e-19) * (x ** 4) + (-3.03650431347386e-20) * (x ** 5) + 
 							// (3.9505827004503474e-21) * (x ** 6) + (-3.043052187202497e-22) * (x ** 7) + (1.291292480059483e-23) * (x ** 8) + 
 							// (-2.3323729478397598e-25) * (x ** 9)
+							// rji_1 = rji; 
+							// rji_2 = rji_1 * rji_1;
+							// rji_3 = rji_1 * rji_2;
+							// rji_4 = rji_2 * rji_2;
+							// rji_5 = rji_2 * rji_3;
+							// rji_6 = rji_3 * rji_3;
+
+							// power_0 = (-1.835937526710263e-18);
+							// power_1 = (2.0614319808537733e-18)  * rji_1;
+							// power_2 = (-9.336800290763924e-19)  * rji_2;
+							// power_3 = (2.1921310294208823e-19)  * rji_3;
+							// power_4 = (-2.8236825728799535e-20) * rji_4;
+							// power_5 = (1.8975776155788362e-21)  * rji_5;
+							// power_6 = (-5.210319363603185e-23)  * rji_6;
+
+							// J       = power_0 + power_1 + power_2 + power_3 + power_4 + power_5 + power_6;
+							// J       = (J * exch_J0);
+							
+							// // Neighbour spin
+							// sjx = x_spin_array[j];
+							// sjy = y_spin_array[j];
+							// sjz = z_spin_array[j];
+							
+							// // Field calculation - component
+							// hx += (J * sjx);
+							// hy += (J * sjy);
+							// hz += (J * sjz);
+
+							// sumJ += J;
+
+							// // (S_i . S_j)
+                 			// si_dot_sj = (sx * sjx) + (sy * sjy) + (sz * sjz);
+
+							// // Exchange force - component
+							// power_1 = (2.0614319808537733e-18);
+							// power_2 = (-9.336800290763924e-19)  * rji_1 * 2;
+							// power_3 = (2.1921310294208823e-19)  * rji_2 * 3;
+							// power_4 = (-2.8236825728799535e-20) * rji_3 * 4;
+							// power_5 = (1.8975776155788362e-21)  * rji_4 * 5;
+							// power_6 = (-5.210319363603185e-23)  * rji_5 * 6;
+
+							// J_prime = power_0 + power_1 + power_2 + power_3 + power_4 + power_5;
+							
+							// // Normalised force on components
+							// fx += (J_prime * si_dot_sj * dx * inv_rji);
+							// fy += (J_prime * si_dot_sj * dy * inv_rji);
+							// fz += (J_prime * si_dot_sj * dz * inv_rji);
+
 							rji_1 = rji; 
 							rji_2 = rji_1 * rji_1;
 							rji_3 = rji_1 * rji_2;
 							rji_4 = rji_2 * rji_2;
 							rji_5 = rji_2 * rji_3;
 							rji_6 = rji_3 * rji_3;
+							rji_7 = rji_3 * rji_4;
+							rji_8 = rji_4 * rji_4;
+							rji_9 = rji_4 * rji_5;
 
-							power_0 = (-1.835937526710263e-18);
-							power_1 = (2.0614319808537733e-18)  * rji_1;
-							power_2 = (-9.336800290763924e-19)  * rji_2;
-							power_3 = (2.1921310294208823e-19)  * rji_3;
-							power_4 = (-2.8236825728799535e-20) * rji_4;
-							power_5 = (1.8975776155788362e-21)  * rji_5;
-							power_6 = (-5.210319363603185e-23)  * rji_6;
-
-							J       = power_0 + power_1 + power_2 + power_3 + power_4 + power_5 + power_6;
+							power_0 = (-1.6013789004079091e-18);
+							power_1 = (1.1923770275429103e-18)  * rji_1;
+							power_2 = (2.050929317476752e-20)   * rji_2;
+							power_3 = (-2.9896826732643693e-19) * rji_3;
+							power_4 = (1.357513552544028e-19)   * rji_4;
+							power_5 = (-3.03650431347386e-20)   * rji_5;
+							power_6 = (3.9505827004503474e-21)  * rji_6;
+							power_7 = (-3.043052187202497e-22)  * rji_7;
+							power_8 = (1.291292480059483e-23)   * rji_8;
+							power_9 = (-2.3323729478397598e-25) * rji_9;
+							J       = power_0 + power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9;
 							J       = (J * exch_J0);
 							
-							// Neighbour spin
-							sjx = x_spin_array[j];
-							sjy = y_spin_array[j];
-							sjz = z_spin_array[j];
-							
-							// Field calculation - component
 							hx += (J * sjx);
 							hy += (J * sjy);
 							hz += (J * sjz);
 
 							sumJ += J;
 
-							// (S_i . S_j)
-                 			si_dot_sj = (sx * sjx) + (sy * sjy) + (sz * sjz);
+							sjx = x_spin_array[j];
+							sjy = y_spin_array[j];
+							sjz = z_spin_array[j];
 
-							// Exchange force - component
-							power_1 = (2.0614319808537733e-18);
-							power_2 = (-9.336800290763924e-19)  * rji_1 * 2;
-							power_3 = (2.1921310294208823e-19)  * rji_2 * 3;
-							power_4 = (-2.8236825728799535e-20) * rji_3 * 4;
-							power_5 = (1.8975776155788362e-21)  * rji_4 * 5;
-							power_6 = (-5.210319363603185e-23)  * rji_5 * 6;
+							si_dot_sj = (sx * sjx) + (sy * sjy) + (sz * sjz);
 
-							J_prime = power_0 + power_1 + power_2 + power_3 + power_4 + power_5;
-							
-							// Normalised force on components
+							power_1 = (1.1923770275429103e-18)  * 1;
+							power_2 = (2.050929317476752e-20)   * rji_1 * 2;
+							power_3 = (-2.9896826732643693e-19) * rji_2 * 3;
+							power_4 = (1.357513552544028e-19)   * rji_3 * 4;
+							power_5 = (-3.03650431347386e-20)   * rji_4 * 5;
+							power_6 = (3.9505827004503474e-21)  * rji_5 * 6;
+							power_7 = (-3.043052187202497e-22)  * rji_6 * 7;
+							power_8 = (1.291292480059483e-23)   * rji_7 * 8;
+							power_9 = (-2.3323729478397598e-25) * rji_8 * 9;
+							J_prime = (power_1 + power_2 + power_3 + power_4 + power_5 + power_6 + power_7 + power_8 + power_9);
+
 							fx += (J_prime * si_dot_sj * dx * inv_rji);
 							fy += (J_prime * si_dot_sj * dy * inv_rji);
 							fz += (J_prime * si_dot_sj * dz * inv_rji);
