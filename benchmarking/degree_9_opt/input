@@ -29,7 +29,7 @@ sim:integrator = spin-lattice
 #------------------------------------------
 sim:applied-field-strength = 0!T
 
-sim:total-time-steps = 5000
+sim:total-time-steps = 500000
 sim:time-steps-increment = 100
 sim:time-step = 1 !fs
 
