@@ -16,6 +16,8 @@
 #include "atoms.hpp" // for exchange list type defs
 #include "sim.hpp"
 #include "exchange.hpp"
+#include "atoms.hpp"
+#include "sld.hpp"
 
 // exchange module headers
 #include "internal.hpp"
@@ -52,6 +54,10 @@ namespace exchange
 
 			double athird = 1.0 / 3.0;
 
+			double dist_a_x, dist_j_x, dist_k_x, dist_l_x;
+			double dist_a_y, dist_j_y, dist_k_y, dist_l_y;
+			double dist_a_z, dist_j_z, dist_k_z, dist_l_z;
+
 			// =========================================================================
 			// Iterate through the neighbour list for interaction calculation
 			// =========================================================================
@@ -62,21 +68,68 @@ namespace exchange
 				natomk = four_spin_neighbour_list_array_k[nn];
 				natoml = four_spin_neighbour_list_array_l[nn];
 
-				if (atoms::type_array[atom] == 2) continue;
+				dist_a_x = 1.0; 
+				dist_j_x = 1.0; 
+				dist_k_x = 1.0;
+				dist_l_x = 1.0;
+
+			 	dist_a_y = 1.0; 
+				dist_j_y = 1.0;
+				dist_k_y = 1.0;
+				dist_l_y = 1.0;
+
+				dist_a_z = 1.0;
+				dist_j_z = 1.0; 
+				dist_k_z = 1.0;
+				dist_l_z = 1.0;
+
+				// TODO : insert distance dependence here !!!!!
+				if (internal::enable_fourspin_distance) {
+
+					// ========== resolve x distance ==========
+					dist_a_x = atoms::x_coord_array[atom];
+					dist_j_x = atoms::x_coord_array[natomj];
+					dist_k_x = atoms::x_coord_array[natomk];
+					dist_l_x = atoms::x_coord_array[natoml];
+
+					dist_j_x = 1 / sld::PBC_wrap(dist_j_x - dist_a_x, cs::system_dimensions[0], cs::pbc[0]);
+					dist_k_x = 1 / sld::PBC_wrap(dist_k_x - dist_a_x, cs::system_dimensions[0], cs::pbc[0]);
+					dist_l_x = 1 / sld::PBC_wrap(dist_l_x - dist_a_x, cs::system_dimensions[0], cs::pbc[0]);
+
+					// ========== resolve y distance ==========
+					dist_a_y = atoms::y_coord_array[atom];
+					dist_j_y = atoms::y_coord_array[natomj];
+					dist_k_y = atoms::y_coord_array[natomk];
+					dist_l_y = atoms::y_coord_array[natoml];
+
+					dist_j_y = 1 / sld::PBC_wrap(dist_j_y - dist_a_y, cs::system_dimensions[1], cs::pbc[1]);
+					dist_k_y = 1 / sld::PBC_wrap(dist_k_y - dist_a_y, cs::system_dimensions[1], cs::pbc[1]);
+					dist_l_y = 1 / sld::PBC_wrap(dist_l_y - dist_a_y, cs::system_dimensions[1], cs::pbc[1]);
+
+					// ========== resolve z distance ==========
+					dist_a_z = atoms::z_coord_array[atom];
+					dist_j_z = atoms::z_coord_array[natomj];
+					dist_k_z = atoms::z_coord_array[natomk];
+					dist_l_z = atoms::z_coord_array[natoml];
+
+					dist_j_z = 1 / sld::PBC_wrap(dist_j_z - dist_a_z, cs::system_dimensions[2], cs::pbc[2]);
+					dist_k_z = 1 / sld::PBC_wrap(dist_k_z - dist_a_z, cs::system_dimensions[2], cs::pbc[2]);
+					dist_l_z = 1 / sld::PBC_wrap(dist_l_z - dist_a_z, cs::system_dimensions[2], cs::pbc[2]);
+				}
 
 				Jij = four_spin_exchange_list[nn];
 
-				sjx = atoms::x_spin_array[natomj];
-				sjy = atoms::y_spin_array[natomj];
-				sjz = atoms::z_spin_array[natomj];
+				sjx = atoms::x_spin_array[natomj] * dist_j_x;
+				sjy = atoms::y_spin_array[natomj] * dist_j_y;
+				sjz = atoms::z_spin_array[natomj] * dist_j_z;
 
-				skx = atoms::x_spin_array[natomk];
-				sky = atoms::y_spin_array[natomk];
-				skz = atoms::z_spin_array[natomk];
+				skx = atoms::x_spin_array[natomk] * dist_k_x;
+				sky = atoms::y_spin_array[natomk] * dist_k_y;
+				skz = atoms::z_spin_array[natomk] * dist_k_z;
 
-				slx = atoms::x_spin_array[natoml];
-				sly = atoms::y_spin_array[natoml];
-				slz = atoms::z_spin_array[natoml];
+				slx = atoms::x_spin_array[natoml] * dist_l_x;
+				sly = atoms::y_spin_array[natoml] * dist_l_y;
+				slz = atoms::z_spin_array[natoml] * dist_l_z;
 
 				sk_dot_sl = dot_product(skx,sky,skz,slx,sly,slz);
 				sj_dot_sk = dot_product(skx,sky,skz,sjx,sjy,sjz);

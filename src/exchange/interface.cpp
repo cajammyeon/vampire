@@ -309,6 +309,12 @@ namespace exchange{
          internal::enable_fourspin = true; // Switch on four-spin calc
          return true;
       }
+      test = "four-spin-distance-dependence";
+      if (word == test) {
+         std::cout << "Fourspin enabled with distance dependence \n";
+         internal::enable_fourspin_distance = true;
+         return true;
+      }
 
       //--------------------------------------------------------------------
       // Keyword not found

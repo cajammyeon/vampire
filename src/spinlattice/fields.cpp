@@ -176,8 +176,6 @@ namespace sld
 				exch_J0 = sld::internal::mp[imat].J0_ms.get();
           		exch_J0_prime = sld::internal::mp[imat].J0_prime.get();
 
-				// TODO : issue with neighbour list calculation
-				// TODO : it's based on the definition of interaction in the unit cell file
 				nbr_start = neighbour_list_start_index[i];
 				nbr_end = neighbour_list_end_index[i] + 1;
 

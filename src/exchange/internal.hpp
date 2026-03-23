@@ -174,6 +174,7 @@ namespace exchange{
       extern bool enable_dmi; // flag to enable dmi calculation
       extern bool enable_kitaev; // flag to enable kitaev calculation
       extern bool enable_fourspin;
+      extern bool enable_fourspin_distance;
 
       extern double dmi_cutoff_range;    // cutoff range for DMI calculation (Ångstroms)
       extern double kitaev_cutoff_range; // cutoff range for Kitaev calculation (Ångstroms)
